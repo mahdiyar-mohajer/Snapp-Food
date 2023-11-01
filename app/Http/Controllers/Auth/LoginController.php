@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     public function showLogin()
     {
-        return view('login');
+        return view('auth.login');
     }
 
     public function login(LoginRequest $request)
@@ -28,6 +28,6 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect(route('login'));
+        return redirect(route('auth.login'));
     }
 }

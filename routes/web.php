@@ -19,13 +19,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Login route
-Route::get('/login', [LoginController::class ,'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class ,'login']);
+Route::get('login', [LoginController::class,'showLogin'])->name('show.login');
+Route::post('login', [LoginController::class,'login'])->name('login');
 
-// Registration routes
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class,'register']);
+Route::get('register', [RegisterController::class,'showRegister'])->name('show.register');
+Route::post('register', [RegisterController::class,'register'])->name('register');
 
 
 Route::get('/admin', [\App\Http\Controllers\AdminController::class,'index']);

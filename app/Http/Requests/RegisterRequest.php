@@ -11,7 +11,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,22 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|confirmed',
+//            'password_confirmation' => 'required|confirmed',
+        ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'اسمتو ننوشتی',
+            'email.required' => 'ایمیلتو بزن',
+            'email.email' => 'ایمیل درست بزن',
+            'password.required' => 'پسووردتو بزن',
+            'password.confirmed' => 'پسووردتو اشتباه زدی',
+//            'password_confirmation.confirmed' => 'پسووردتو اشتباه زدی',
+//            'password_confirmation.required' => 'پسووردتو بزن',
         ];
     }
 }
