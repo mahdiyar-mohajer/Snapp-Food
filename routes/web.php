@@ -26,3 +26,7 @@ Route::post('/login', [LoginController::class ,'login']);
 // Registration routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('/register', [RegisterController::class,'register']);
+
+
+Route::get('/admin', [\App\Http\Controllers\AdminController::class,'index']);
+Route::get('/admin/create', [\App\Http\Controllers\AdminController::class,'create'])->name('admin.create');
