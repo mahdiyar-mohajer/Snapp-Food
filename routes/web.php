@@ -19,15 +19,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('login', [LoginController::class, 'showLogin'])->name('show.login');
+
 Route::middleware(['web', 'checkStatus'])->group(function () {
     // Your authenticated routes here
     Route::post('login', [LoginController::class, 'login'])->name('login');
 });
 
-
+Route::get('login', [LoginController::class, 'showLogin'])->name('show.login');
 Route::get('register', [RegisterController::class, 'showRegister'])->name('show.register');
 Route::post('register', [RegisterController::class, 'register'])->name('register');
+Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');

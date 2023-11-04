@@ -1,5 +1,6 @@
-@extends('seller.layout.app')
+@extends('admin.layout.app')
 @section('title', 'ادمین پنل')
+
 @section('content')
     <div class="max-w-4xl mx-auto px-4 py-8">
         <table class="min-w-full bg-white border divide-y divide-gray-300 rounded-lg">
