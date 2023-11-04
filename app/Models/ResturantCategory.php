@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class ResturantCategory extends Model
 {
     use HasFactory;
+    protected $table = 'resturant_categories';
+
+    public function resturant()
+    {
+        return $this->hasMany(Resturant::class);
+    }
 }

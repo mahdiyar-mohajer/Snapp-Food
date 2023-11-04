@@ -8,4 +8,39 @@ use Illuminate\Database\Eloquent\Model;
 class Resturant extends Model
 {
     use HasFactory;
+    protected $table = 'resturants';
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
+
+    public function foodParties()
+    {
+        return $this->hasMany(FoodParty::class);
+    }
+
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+
+    public function foods()
+    {
+        return $this->hasMany(Food::class);
+    }
+
+    public function foodCategory()
+    {
+        return $this->hasMany(FoodCategory::class);
+    }
 }

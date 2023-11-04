@@ -1,5 +1,5 @@
 <!doctype html >
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,8 +10,6 @@
 </head>
 <body>
 <div class="flex w-full">
-
-
     <aside class="flex flex-col w-48 h-screen px-5 py-8 overflow-y-auto bg-white border-r rtl:border-r-0 rtl:border-l dark:bg-gray-500 dark:border-gray-700">
         <a href="#">
             <img class="w-auto h-24" src="https://uptime.com/media/website_profiles/snappfood.ir.png" alt="">

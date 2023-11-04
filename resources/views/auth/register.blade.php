@@ -14,6 +14,10 @@
         @error('name')
         <div class="alert alert-danger text-danger p-1 text-end">{{ $message }}</div>
         @enderror
+        <input type="text" name="phone" class="text-end" placeholder="شمارت چنده؟">
+        @error('phone')
+        <div class="alert alert-danger text-danger p-1 text-end">{{ $message }}</div>
+        @enderror
         <input type="text" name="email" class="text-end" placeholder="ایمیلتو بزن">
         @error('email')
         <div class="alert alert-danger text-danger p-1 text-end">{{ $message }}</div>

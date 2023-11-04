@@ -1,6 +1,6 @@
 <?php
 
-namespace config\database\migrations;
+namespace database\migrations;
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

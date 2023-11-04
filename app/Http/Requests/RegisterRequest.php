@@ -23,6 +23,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'phone' => 'required',
             'email' => 'required|email',
             'password' => 'required|confirmed',
 //            'password_confirmation' => 'required|confirmed',
@@ -32,6 +33,7 @@ class RegisterRequest extends FormRequest
     {
         return [
             'name.required' => 'اسمتو ننوشتی',
+            'phone.required' => 'شماره یادت نره',
             'email.required' => 'ایمیلتو بزن',
             'email.email' => 'ایمیل درست بزن',
             'password.required' => 'پسووردتو بزن',

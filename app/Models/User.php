@@ -21,8 +21,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
+        'status',
     ];
 
     /**
@@ -44,4 +46,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function resturants()
+    {
+        return $this->hasMany('resturant','user_id','id');
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->attributes['status'] ? 'فعال' : 'غیر فعال';
+    }
 }

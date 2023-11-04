@@ -20,13 +20,14 @@ class RegisterController extends Controller
 
         $data = [
             'name' => $validatedData['name'],
+            'phone' => $validatedData['phone'],
             'email' => $validatedData['email'],
             'password' => bcrypt($validatedData['password']), // Hash the password
         ];
 
         User::query()->create($data);
 
-        return redirect()->route('home');
+        return redirect()->route('seller.dashboard');
 
     }
     public function showRegister()

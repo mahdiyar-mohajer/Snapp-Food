@@ -190,7 +190,7 @@
 
         img, video {
             max-width: 100%;
-            height: auto
+            height: 100%;
         }
 
         [hidden] {
@@ -778,6 +778,7 @@
                 padding: 2rem
             }
         }
+
     </style>
 </head>
 <body class="antialiased">
@@ -801,7 +802,7 @@
         </div>
     @endif
     <div>
-        <img src="asset/images/home-bg.jpg">
+        <img src="asset/images/home-bg.jpg"  height="100%">
     </div>
 
 </div>
