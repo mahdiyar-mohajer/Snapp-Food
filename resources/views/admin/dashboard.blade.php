@@ -17,7 +17,23 @@
                     <td class="px-6 py-4">{{ $user['email'] }}</td>
                     <td class="px-6 py-4">{{ $user['name'] }}</td>
                     <td class="px-6 py-4">{{ $user['phone'] }}</td>
-                    <td class="px-6 py-4">{{ $user['status'] }}</td>
+                    <td class="px-6 py-4">
+                        @if ($user->status === 'active')
+                            <form method="POST" action="{{ route('users.toggleStatus', $user->id) }}">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status" value="inactive">
+                                <button type="submit" class="btn btn-danger">Deactivate</button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('users.toggleStatus', $user->id) }}">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="status" value="active">
+                                <button type="submit" class="btn btn-success">Activate</button>
+                            </form>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
             </tbody>

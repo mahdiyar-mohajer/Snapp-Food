@@ -19,12 +19,24 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
+            $user = Auth::user(); // Get the authenticated user
+            if ($user->status === 'inactive') {
+                auth()->logout();
+                return redirect()->route('login')->with('error', 'متاسفانه اکانت شما فعال نیست. با ادمین تماس بگیرید.');
+            }
             return redirect()->route('seller.dashboard');
         }
 
         return back()->with('error', 'ایمیل یا پسووردت اشتباهه!');
-
     }
+//    protected function authenticated(Request $request, $user)
+//    {
+//        if ($user->status === 'inactive') {
+//            auth()->logout();
+//            return redirect()->route('login')->with('error', 'You cannot login because your account is deactivated. Please contact the administrator.');
+//        }
+//        return redirect()->intended($this->redirectPath());
+//    }
     public function logout(Request $request)
     {
         Auth::logout();

@@ -52,8 +52,8 @@ class User extends Authenticatable
         return $this->hasMany('resturant','user_id','id');
     }
 
-    public function getStatusAttribute()
-    {
-        return $this->attributes['status'] ? 'فعال' : 'غیر فعال';
-    }
+//    public function getStatusAttribute()
+//    {
+//        return $this->attributes['status'] ? 'فعال' : 'غیر فعال';
+//    }
 }

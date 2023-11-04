@@ -16,4 +16,21 @@ class AdminController extends Controller
     {
         return view('admin.create');
     }
+
+    public function toggleStatus(Request $request,$id)
+    {
+        $user = User::find($id);
+        if ($user) {
+            // Validate the status value to prevent tampering.
+            $validStatuses = ['active', 'inactive'];
+            $newStatus = $request->input('status');
+
+            if (in_array($newStatus, $validStatuses)) {
+                $user->update(['status' => $newStatus]);
+                // Add any additional logic or notifications as needed
+                return redirect()->back()->with('success', 'User status updated successfully.');
+            }
+        }
+        return redirect()->back()->with('error', 'User not found.');
+    }
 }
