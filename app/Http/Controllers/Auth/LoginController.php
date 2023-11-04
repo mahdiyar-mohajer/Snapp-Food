@@ -24,7 +24,14 @@ class LoginController extends Controller
                 auth()->logout();
                 return redirect()->route('login')->with('error', 'متاسفانه اکانت شما فعال نیست. با ادمین تماس بگیرید.');
             }
-            return redirect()->route('seller.dashboard');
+            if ($user->hasRole('admin')) {
+                // Redirect admin to the admin route
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->hasRole('seller')) {
+                // Redirect seller to the seller route
+                return redirect()->route('seller.dashboard');
+            }
+//            return redirect()->route('seller.dashboard');
         }
 
         return back()->with('error', 'ایمیل یا پسووردت اشتباهه!');
