@@ -49,11 +49,26 @@ class User extends Authenticatable
 
     public function resturants()
     {
-        return $this->hasMany('resturant','user_id','id');
+        return $this->hasMany(Resturant::class);
+    }
+    public function banks()
+    {
+        return $this->hasMany(Bank::class);
     }
 
-//    public function getStatusAttribute()
-//    {
-//        return $this->attributes['status'] ? 'فعال' : 'غیر فعال';
-//    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
 }
