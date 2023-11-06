@@ -24,14 +24,20 @@
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status" value="inactive">
-                                <button type="submit" class="btn btn-danger">Deactivate</button>
+                                <button type="submit"
+                                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    غیر فعال
+                                </button>
                             </form>
                         @else
                             <form method="POST" action="{{ route('users.toggleStatus', $user->id) }}">
                                 @csrf
                                 @method('PUT')
                                 <input type="hidden" name="status" value="active">
-                                <button type="submit" class="btn btn-success">Activate</button>
+                                <button type="submit"
+                                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                    فعال
+                                </button>
                             </form>
                         @endif
                     </td>
@@ -39,5 +45,6 @@
             @endforeach
             </tbody>
         </table>
+        {{ $users->links('custom-pagination') }}
     </div>
 @endsection

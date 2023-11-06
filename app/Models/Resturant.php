@@ -9,6 +9,12 @@ class Resturant extends Model
 {
     use HasFactory;
     protected $table = 'resturants';
+    protected $fillable = [
+        'name',
+        'phone_number',
+        'start_time',
+        'end_time',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

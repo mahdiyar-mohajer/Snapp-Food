@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('resturants', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('phone_number');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->boolean('ship_price');
+            $table->string('phone_number');
+            $table->string('start_time');
+            $table->string('end_time');
+            $table->string('ship_price');
             $table->tinyInteger('status');
+            $table->boolean('profile_complete')->default(false);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('address_id')->nullable();
             $table->unsignedBigInteger('bank_id')->nullable();

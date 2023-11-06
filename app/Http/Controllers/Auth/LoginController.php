@@ -60,6 +60,7 @@ class LoginController extends Controller
             $redirectRoute = $this->getRedirectRouteForUser($user);
 
             if ($redirectRoute) {
+                session()->regenerate();
                 return redirect()->route($redirectRoute);
             }
         }
@@ -81,6 +82,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        session()->invalidate();
         return redirect(route('show.login'));
     }
 }

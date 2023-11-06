@@ -9,7 +9,8 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $users = User::query()->get()->all();
+//        $users = User::query()->get()->all();
+        $users = User::query()->paginate(2);
         return view('admin.dashboard', compact('users'));
     }
     public function create()

@@ -46,11 +46,11 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function resturants()
+    public function resturant()
     {
-        return $this->hasMany(Resturant::class);
+        return $this->hasOne(Resturant::class);
     }
-    public function banks()
+    public function bank()
     {
         return $this->hasMany(Bank::class);
     }

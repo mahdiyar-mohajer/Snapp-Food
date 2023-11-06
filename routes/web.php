@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\FoodController;
+use App\Http\Controllers\RestaurantController;
+use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    // Your dashboard logic here
+    return view('welcome');
+})->name('dashboard');
 
 
 Route::middleware(['web', 'checkStatus'])->group(function () {
@@ -37,7 +45,26 @@ Route::group(['middleware' => ['role:admin']], function () {
 
 });
 
-Route::group(['middleware' => ['role:seller']], function () {
-    Route::get('/seller', [\App\Http\Controllers\SellerController::class, 'index'])->name('seller.dashboard');
-});
+//Route::group(['middleware' => ['role:seller']], function () {
+//    Route::get('/seller', [\App\Http\Controllers\SellerController::class, 'index'])->name('seller.dashboard');
+//});
+//,'checkRestaurantProfile'
+Route::middleware(['auth', 'role:seller'])->group(function () {
 
+    // Create a new food item
+    Route::get('/seller/create', [FoodController::class,'create'])->name('foods.create');
+    Route::post('/seller', [FoodController::class,'store'])->name('foods.store');
+
+    // Edit a food item
+    Route::get('/seller/{food}', [FoodController::class,'edit'])->name('foods.edit');
+    Route::put('/seller/{food}', [FoodController::class,'update'])->name('foods.update');
+
+    // Delete a food item
+    Route::delete('/seller/{food}', [FoodController::class,'destroy'])->name('foods.destroy');
+});
+Route::middleware(['auth', 'role:seller'])->group(function () {
+    Route::get('/seller', [SellerController::class, 'index'])->name('seller.dashboard');
+
+    Route::get('/seller/restaurant/profile', [RestaurantController::class ,'profile'])->name('resturant.profile'); // Fixed the route name
+    Route::post('/seller/restaurant/profile', [RestaurantController::class ,'updateProfile'])->name('resturant.updateProfile'); // Fixed the route name
+});
