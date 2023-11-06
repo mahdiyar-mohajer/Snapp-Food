@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
 
 class RegisterController extends Controller
 {
@@ -25,7 +29,12 @@ class RegisterController extends Controller
             'password' => bcrypt($validatedData['password']), // Hash the password
         ];
 
-        User::query()->create($data);
+        $user = User::query()->create($data);
+
+        $sellerRole = Role::query()->where('name', 'seller')->first();
+        if ($sellerRole) {
+            $user->assignRole($sellerRole);
+        }
 
         return redirect()->route('seller.dashboard');
 
