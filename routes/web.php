@@ -64,5 +64,6 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/seller/restaurant/profile', [RestaurantController::class ,'profile'])->name('resturant.profile');
     Route::post('/seller/restaurant/profile', [RestaurantController::class ,'updateProfile'])->name('resturant.updateProfile');
     Route::post('/seller/restaurant/profile/upload-picture', [RestaurantController::class ,'uploadPicture'])->name('resturant.uploadPicture');
+    Route::post('/restaurant/activate', [RestaurantController::class ,'toggleActivation'])->name('restaurant.toggleActivation');
 
 });

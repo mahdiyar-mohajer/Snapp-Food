@@ -16,7 +16,14 @@
                 <p>Start Time: {{ $restaurantWithImages->start_time }}</p>
                 <p>End Time: {{ $restaurantWithImages->end_time }}</p>
                 <p>Shipping Price: {{ $restaurantWithImages->ship_price }}</p>
-                <p>Status: {{ $restaurantWithImages->status }}</p>
+{{--                <p>Status: {{ $restaurantWithImages->status }}</p>--}}
+                <form action="{{ route('restaurant.toggleActivation') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+                        {{ $restaurant->status == 1 ? 'Deactivate' : 'Activate' }} Restaurant
+                    </button>
+                </form>
             </div>
         </div>
     </div>

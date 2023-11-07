@@ -60,6 +60,22 @@ class RestaurantController extends Controller
 
         return redirect()->route('seller.dashboard');
     }
+
+
+    public function toggleActivation(Request $request)
+    {
+        $restaurant = Resturant::find($request->input('restaurant_id'));
+
+        if (!$restaurant) {
+            return abort(404);
+        }
+
+        // Toggle the restaurant's status
+        $restaurant->status = $restaurant->status == 1 ? 0 : 1;
+        $restaurant->save();
+
+        return redirect()->back();
+    }
 }
 
 
