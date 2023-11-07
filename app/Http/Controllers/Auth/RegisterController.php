@@ -27,17 +27,17 @@ class RegisterController extends Controller
             'name' => $validatedData['name'],
             'phone' => $validatedData['phone'],
             'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']), // Hash the password
+            'password' => bcrypt($validatedData['password']),
         ];
 
         $user = User::query()->create($data);
 
-        if (strpos($user->name, 'admin') !== false) {
+        if (str_contains($user->name, 'admin')) {
             $adminRole = Role::query()->where('name', 'admin')->first();
             if ($adminRole) {
                 $user->assignRole($adminRole);
             }
-            Auth::login($user); // Manually log in the admin
+            Auth::login($user);
             return redirect()->route('admin.dashboard');
         }
 
@@ -46,7 +46,7 @@ class RegisterController extends Controller
             $user->assignRole($sellerRole);
         }
 
-        Auth::login($user); // Manually log in the seller
+        Auth::login($user);
         return redirect()->route('seller.dashboard');
     }
 

@@ -2,10 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Resturant;
 use Illuminate\Http\Request;
 
 class SellerController extends Controller
 {
+//    public function index()
+//    {
+//        $user = auth()->user();
+//        $restaurant = $user->resturant;
+//
+//        if (!$restaurant || !$restaurant->profile_complete) {
+//            return redirect()->route('resturant.profile');
+//        }
+//
+//        return view('seller.dashboard');
+//    }
+
     public function index()
     {
         $user = auth()->user();
@@ -15,6 +28,10 @@ class SellerController extends Controller
             return redirect()->route('resturant.profile');
         }
 
-        return view('seller.dashboard');
+        // Load restaurant data with images
+        $restaurantWithImages = Resturant::with('images')->where('id', $restaurant->id)->first();
+
+        return view('seller.dashboard', compact('restaurantWithImages'));
     }
+
 }
