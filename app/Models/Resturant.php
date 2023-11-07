@@ -42,7 +42,7 @@ class Resturant extends Model
 
     public function foods()
     {
-        return $this->hasMany(Food::class);
+        return $this->hasMany(Food::class, 'resturant_id');
     }
 
     public function foodCategory()

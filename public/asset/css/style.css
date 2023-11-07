@@ -87,3 +87,7 @@ body{
 .signup label:hover{
     text-decoration: underline;
 }
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease; /* Adjust the duration as needed */
+}

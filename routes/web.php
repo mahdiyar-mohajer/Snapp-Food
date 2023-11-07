@@ -47,23 +47,45 @@ Route::group(['middleware' => ['role:admin']], function () {
 });
 
 
-Route::middleware(['auth', 'role:seller'])->group(function () {
-    // Create a new food item
-    Route::get('/seller/create', [FoodController::class,'create'])->name('foods.create');
-    Route::post('/seller', [FoodController::class,'store'])->name('foods.store');
-    // Edit a food item
-    Route::get('/seller/{food}', [FoodController::class,'edit'])->name('foods.edit');
-    Route::put('/seller/{food}', [FoodController::class,'update'])->name('foods.update');
-    // Delete a food item
-    Route::delete('/seller/{food}', [FoodController::class,'destroy'])->name('foods.destroy');
-});
+//Route::middleware(['auth', 'role:seller'])->group(function () {
+//    // Create a new food item
+//    Route::get('/seller/create', [FoodController::class,'create'])->name('foods.create');
+//    Route::post('/seller', [FoodController::class,'store'])->name('foods.store');
+//    // Edit a food item
+//    Route::get('/seller/{food}', [FoodController::class,'edit'])->name('foods.edit');
+//    Route::put('/seller/{food}', [FoodController::class,'update'])->name('foods.update');
+//    // Delete a food item
+//    Route::delete('/seller/{food}', [FoodController::class,'destroy'])->name('foods.destroy');
+//});
+//
+//
+//Route::middleware(['auth', 'role:seller'])->group(function () {
+//    Route::get('/seller', [SellerController::class, 'index'])->name('seller.dashboard');
+//    Route::get('/seller/restaurant/profile', [RestaurantController::class ,'profile'])->name('resturant.profile');
+//    Route::post('/seller/restaurant/profile', [RestaurantController::class ,'updateProfile'])->name('resturant.updateProfile');
+//    Route::post('/seller/restaurant/profile/upload-picture', [RestaurantController::class ,'uploadPicture'])->name('resturant.uploadPicture');
+//    Route::post('/restaurant/activate', [RestaurantController::class ,'toggleActivation'])->name('restaurant.toggleActivation');
+//
+//});
 
-
 Route::middleware(['auth', 'role:seller'])->group(function () {
+    // Seller Dashboard
     Route::get('/seller', [SellerController::class, 'index'])->name('seller.dashboard');
-    Route::get('/seller/restaurant/profile', [RestaurantController::class ,'profile'])->name('resturant.profile');
-    Route::post('/seller/restaurant/profile', [RestaurantController::class ,'updateProfile'])->name('resturant.updateProfile');
-    Route::post('/seller/restaurant/profile/upload-picture', [RestaurantController::class ,'uploadPicture'])->name('resturant.uploadPicture');
-    Route::post('/restaurant/activate', [RestaurantController::class ,'toggleActivation'])->name('restaurant.toggleActivation');
+
+    // Restaurant Profile
+    Route::get('/seller/restaurant/profile', [RestaurantController::class, 'profile'])->name('resturant.profile');
+    Route::post('/seller/restaurant/profile', [RestaurantController::class, 'updateProfile'])->name('resturant.updateProfile');
+    Route::post('/seller/restaurant/profile/upload-picture', [RestaurantController::class, 'uploadPicture'])->name('resturant.uploadPicture');
+    Route::post('/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('restaurant.toggleActivation');
+
+    // Food Items
+    Route::get('/seller/foods/create', [FoodController::class, 'create'])->name('foods.create');
+    Route::post('/seller/foods', [FoodController::class, 'store'])->name('foods.store');
+    Route::get('/seller/foods/{food}/edit', [FoodController::class, 'edit'])->name('foods.edit');
+    Route::put('/seller/foods/{food}', [FoodController::class, 'update'])->name('foods.update');
+    Route::delete('/seller/foods/{food}', [FoodController::class, 'destroy'])->name('foods.destroy');
+    Route::get('/seller/foods/index', [FoodController::class, 'index'])->name('foods.index');
+    Route::get('/seller/foods/{food}', [FoodController::class, 'show'])->name('foods.show');
+
 
 });
