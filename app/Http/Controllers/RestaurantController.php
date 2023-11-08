@@ -60,9 +60,6 @@ class RestaurantController extends Controller
                 $restaurant->image()->save($imageModel);
             }
 
-
-
-
             return redirect()->route('seller.dashboard');
         }
     }

@@ -21,8 +21,10 @@
 <div class="flex w-full">
 
     @php
+
+
         $user = \App\Models\User::find(Auth::id());
-        $restaurant = $user->restaurant;
+        $restaurant = $user->resturant;
 
         if ($restaurant) {
             $restaurantWithImages = \App\Models\Resturant::with('image')->find($restaurant->id);
@@ -159,9 +161,11 @@
         </div>
     </aside>
     <div class="flex w-5/6">
+
         @yield('content')
     </div>
 </div>
+
 
 </body>
 </html>

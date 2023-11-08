@@ -7,17 +7,6 @@
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <h2 class="text-2xl font-semibold">غذاها</h2>
 
-                @if(session('success'))
-                    <div class="bg-green-200 text-green-800 px-4 py-2 rounded auto-dismiss">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="bg-red-200 text-red-800 px-4 py-2 rounded auto-dismiss">
-                        {{ session('error') }}
-                    </div>
-                @endif
 
                 <div class="my-4">
                     <input type="text" name="search" id="foodSearch" class="border p-2" placeholder="Search for foods">

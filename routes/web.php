@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\FoodController;
@@ -44,7 +45,13 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
     Route::put('/admin/users/{id}/toggleStatus', [AdminController::class, 'toggleStatus'])->name('users.toggleStatus');
     Route::post('/admin/users/{id}/promote', [AdminController::class, 'promoteToAdmin'])->middleware(['auth', 'admin-promote'])->name('users.promoteToAdmin');
-    Route::resource('admin/restaurant-categories', AdminRestaurantCategoryController::class);
+
+    Route::get('admin/restaurant-categories/create', [AdminRestaurantCategoryController::class, 'create'])->name('restaurant-categories.create');
+    Route::post('admin/restaurant-categories', [AdminRestaurantCategoryController::class, 'store'])->name('restaurant-categories.store');
+    Route::get('admin/restaurant-categories', [AdminRestaurantCategoryController::class, 'index'])->name('restaurant-categories.index');
+    Route::get('admin/restaurant-categories/{category}/edit', [AdminRestaurantCategoryController::class, 'edit'])->name('restaurant-categories.edit');
+    Route::put('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'update'])->name('restaurant-categories.update');
+    Route::delete('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'destroy'])->name('restaurant-categories.destroy');
 
 });
 
