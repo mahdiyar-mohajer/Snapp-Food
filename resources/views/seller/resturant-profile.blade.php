@@ -2,10 +2,22 @@
 @section('title', 'صفحه فروشنده')
 
 @section('content')
+
+
     <div class="container mx-auto">
         <div class="py-8">
             <h1 class="text-2xl font-semibold mb-4">Complete Your Restaurant Profile</h1>
+            @if(session('success'))
+                <div class="bg-green-200 text-green-800 px-4 py-2 rounded auto-dismiss">
+                    {{ session('success') }}
+                </div>
+            @endif
 
+            @if(session('error'))
+                <div class="bg-red-200 text-red-800 px-4 py-2 rounded auto-dismiss">
+                    {{ session('error') }}
+                </div>
+            @endif
             <form action="{{ route('resturant.updateProfile') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 

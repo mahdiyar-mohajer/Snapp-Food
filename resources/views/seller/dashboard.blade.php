@@ -4,8 +4,8 @@
     @if ($restaurantWithImages)
         <div class="w-2/3 p-4">
             <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-                @if ($restaurantWithImages->images->count() > 0)
-                    <img src="{{ asset('storage/' . $restaurantWithImages->images->first()->url) }}"
+                @if ($restaurantWithImages->image)
+                    <img src="{{ asset('storage/' . $restaurantWithImages->image->url) }}"
                          alt="{{ $restaurantWithImages->name }}" class="w-full h-32 object-cover">
                 @else
                     <img src="{{ asset('path/to/default-image.jpg') }}" alt="No Image" class="w-full h-32 object-cover">

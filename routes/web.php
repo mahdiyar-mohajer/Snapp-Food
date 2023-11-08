@@ -44,6 +44,8 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/admin/create', [AdminController::class, 'create'])->name('admin.create');
     Route::put('/admin/users/{id}/toggleStatus', [AdminController::class, 'toggleStatus'])->name('users.toggleStatus');
     Route::post('/admin/users/{id}/promote', [AdminController::class, 'promoteToAdmin'])->middleware(['auth', 'admin-promote'])->name('users.promoteToAdmin');
+    Route::resource('admin/restaurant-categories', AdminRestaurantCategoryController::class);
+
 });
 
 
@@ -86,5 +88,10 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::delete('/seller/foods/{food}', [FoodController::class, 'destroy'])->name('foods.destroy');
     Route::get('/seller/foods/index', [FoodController::class, 'index'])->name('foods.index');
     Route::get('/seller/foods/{food}', [FoodController::class, 'show'])->name('foods.show');
+    Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
+
+
 
 });
+
+

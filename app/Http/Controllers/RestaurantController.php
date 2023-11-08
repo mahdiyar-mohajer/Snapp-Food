@@ -35,30 +35,36 @@ class RestaurantController extends Controller
         $restaurant->ship_price = $request->input('ship_price');
         $restaurant->status = $request->input('status');
         $restaurant->profile_complete = true;
+        $restaurant->save();
 
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
             $restaurantEmail = $restaurant->user->email;
+            $randomNumber = rand(10000, 99999);
 
             $folderPath = 'restaurant_images/' . $restaurantEmail;
 
-            $path = $image->store($folderPath, 'public');
+            $extension = $image->getClientOriginalExtension();
+            $filename = $restaurantEmail . '_' . $randomNumber . '.' . $extension;
+            $path = $image->storeAs($folderPath, $filename, 'public');
 
-            if ($restaurant->images->count() > 0) {
 
-                $existingImage = $restaurant->images->first();
+            if ($restaurant->image) {
+
+                $existingImage = $restaurant->image;
                 Storage::disk('public')->delete($existingImage->url);
                 $existingImage->url = $path;
                 $existingImage->save();
             } else {
                 $imageModel = new Image(['url' => $path]);
-                $restaurant->images()->save($imageModel);
+                $restaurant->image()->save($imageModel);
             }
+
+
+
+
+            return redirect()->route('seller.dashboard');
         }
-
-        $restaurant->save();
-
-        return redirect()->route('seller.dashboard');
     }
 
 

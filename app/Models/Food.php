@@ -25,4 +25,8 @@ class Food extends Model
     {
         return $this->hasMany(FoodCategory::class);
     }
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
+    }
 }

@@ -13,10 +13,10 @@ class SellerController extends Controller
         $restaurant = $user->resturant;
 
         if (!$restaurant || !$restaurant->profile_complete) {
-            return redirect()->route('resturant.profile' , compact('restaurant'));
+            return redirect()->route('resturant.profile');
         }
 
-        $restaurantWithImages = Resturant::with('images')->where('id', $restaurant->id)->first();
+        $restaurantWithImages = Resturant::with('image')->find($restaurant->id);
 
         return view('seller.dashboard', compact('restaurantWithImages','restaurant'));
     }

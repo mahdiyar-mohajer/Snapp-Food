@@ -3,16 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\Image;
 use App\Models\Resturant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class FoodController extends Controller
 {
 
     public function index()
     {
+        $user = Auth::user();
+
+        if (!$user->resturant) {
+            return redirect()->route('resturant.profile')->with('failed', 'اطلاعات رستوران رو تکمیل کن.');
+        }
         $foods = Food::where('resturant_id', Auth::user()->resturant->id)->get();
         return view('foods.index', compact('foods'));
     }
@@ -51,8 +58,19 @@ class FoodController extends Controller
                 ]);
 
                 $food->resturant()->associate($restaurant); // Associate the food with the user's restaurant
-
                 $food->save();
+
+                if ($request->hasFile('food_image')) {
+                    $image = $request->file('food_image');
+                    $restaurantEmail = $restaurant->user->email;
+                    $path = $image->store('restaurant_images/' . $restaurantEmail . '/foods', 'public');
+
+                    // Create a new image record and associate it with the food
+                    $imageModel = new Image(['url' => $path]);
+                    $food->image()->save($imageModel);
+                }
+
+
 
                 return redirect()->route('foods.index')->with('success', 'غذا با موفقیت اضافه شد.');
             } else {
@@ -63,15 +81,11 @@ class FoodController extends Controller
         }
     }
 
-
-// Edit a food item form
     public function edit(Food $food)
     {
-        // Corrected the model name to Restaurant
         return view('foods.edit', compact('food'));
     }
 
-// Update a food item
     public function update(Request $request, Food $food)
     {
         $request->validate([
@@ -87,7 +101,6 @@ class FoodController extends Controller
         return redirect()->route('foods.index')->with('success', 'غذا با موفقیت آپدیت شد.');
     }
 
-// Delete a food item
     public function destroy(Food $food)
     {
         DB::transaction(function () use ($food) {
@@ -95,6 +108,14 @@ class FoodController extends Controller
         });
 
         return redirect()->route('foods.index')->with('success', 'غذا با موفقیت حذف شد.');
+    }
+
+    public function liveSearch(Request $request)
+    {
+        $search = $request->input('search');
+        $foods = Food::where('name', 'like', '%' . $search . '%')->get();
+
+        return response()->json(['data' => $foods]);
     }
 
 }
