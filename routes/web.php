@@ -87,5 +87,4 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/seller/foods/index', [FoodController::class, 'index'])->name('foods.index');
     Route::get('/seller/foods/{food}', [FoodController::class, 'show'])->name('foods.show');
 
-
 });

@@ -5,7 +5,7 @@
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6">
-                <h2 class="text-2xl font-semibold">Food Items</h2>
+                <h2 class="text-2xl font-semibold">غذاها</h2>
 
                 @if(session('success'))
                     <div class="bg-green-200 text-green-800 px-4 py-2 rounded auto-dismiss">
@@ -19,20 +19,21 @@
                     </div>
                 @endif
 
-
-
                 <div class="my-4">
-                    <a href="{{ route('foods.create') }}" class="bg-green-500 text-white font-semibold px-4 py-2 rounded hover:bg-green-600">Create Food Item</a>
+                    <a href="{{ route('foods.create') }}" class="bg-green-500 text-white font-semibold px-4 py-2 rounded hover:bg-green-600">اضافه کردن غذا</a>
                 </div>
 
                 <table class="min-w-full divide-y divide-gray-200 mt-4">
                     <thead>
                     <tr>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Name
+                        <th class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            اسم
                         </th>
-                        <th class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Restaurant
+                        <th class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            مواد تشکیل دهنده
+                        </th>
+                        <th class="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            قیمت
                         </th>
                         <th class="px-6 py-3 bg-gray-50"></th>
                     </tr>
@@ -41,13 +42,8 @@
                     @foreach ($foods as $food)
                         <tr>
                             <td class="px-6 py-4 whitespace-no-wrap">{{ $food->name }}</td>
-                            <td class="px-6 py-4 whitespace-no-wrap">
-                                @if ($food->restaurant)
-                                    {{ $food->restaurant->name }}
-                                @else
-                                    <span class="text-red-600">Restaurant not specified</span>
-                                @endif
-                            </td>
+                            <td class="px-6 py-4 whitespace-no-wrap">{{ $food->raw_material }}</td>
+                            <td class="px-6 py-4 whitespace-no-wrap">{{ $food->price }}</td>
                             <td class="px-6 py-4 whitespace-no-wrap text-right text-sm font-medium">
                                 <a href="{{ route('foods.show', $food) }}" class="text-indigo-600 hover:text-indigo-900">View</a>
                                 <a href="{{ route('foods.edit', $food) }}" class="text-blue-500 hover:text-blue-700 ml-2">Edit</a>
@@ -70,6 +66,42 @@
                 message.style.display = 'none';
             });
         }, 5000); // 10 seconds
+    </script>
+    <script>
+        const searchForm = document.getElementById('food-search-form');
+        const searchInput = document.getElementById('food-search-input');
+        const searchResults = document.getElementById('food-search-results');
+
+        searchForm.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const filteredFoods = [];
+
+            // Perform the client-side search
+            for (const food of foods) {
+                if (food.name.toLowerCase().includes(query) || food.raw_material.toLowerCase().includes(query)) {
+                    filteredFoods.push(food);
+                }
+            }
+
+            // Render the search results
+            renderSearchResults(filteredFoods);
+        });
+
+        function renderSearchResults(results) {
+            searchResults.innerHTML = '';
+
+            if (results.length > 0) {
+                for (const result of results) {
+                    const resultItem = document.createElement('div');
+                    resultItem.innerText = result.name;
+                    searchResults.appendChild(resultItem);
+                }
+            } else {
+                const noResultsMessage = document.createElement('div');
+                noResultsMessage.innerText = 'No results found.';
+                searchResults.appendChild(noResultsMessage);
+            }
+        }
     </script>
 @endsection
 
