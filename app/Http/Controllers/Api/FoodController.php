@@ -9,13 +9,11 @@ use Illuminate\Http\Request;
 
 class FoodController extends Controller
 {
-    public function getFoods()
+    public function getFoods($restaurant_id)
     {
 
-        $foods = Food::all();
+        $foods = Food::where('resturant_id', $restaurant_id)->get();
 
-        // You can return the $foods as a response or use an API resource to format the response
-        // For example, you can return the $foods as JSON:
-        return response()->json($foods);
+        return response()->json(['foods' => $foods]);
     }
 }
