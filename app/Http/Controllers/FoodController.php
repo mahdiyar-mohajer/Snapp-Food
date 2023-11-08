@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class FoodController extends Controller
 {
+
     public function index()
     {
-        Auth::user();
-        $foods = Food::with('resturant')->get();
+        $foods = Food::where('resturant_id', Auth::user()->resturant->id)->get();
         return view('foods.index', compact('foods'));
     }
+
 
     public function show(Food $food)
     {
@@ -40,26 +41,28 @@ class FoodController extends Controller
         $user = Auth::user();
 
         if ($user) {
-            $restaurant = $user->restaurant; // Assuming a user has one restaurant
+            $restaurant = $user->resturant; // Assuming a one-to-one relationship between user and restaurant
 
             if ($restaurant) {
                 $food = new Food([
                     'name' => $request->input('name'),
                     'raw_material' => $request->input('raw_material'),
                     'price' => $request->input('price'),
-                    'restaurant_id' => $restaurant->id, // Assign the restaurant_id from the authenticated user's restaurant
                 ]);
+
+                $food->resturant()->associate($restaurant); // Associate the food with the user's restaurant
 
                 $food->save();
 
                 return redirect()->route('foods.index')->with('success', 'غذا با موفقیت اضافه شد.');
             } else {
-                return redirect()->route('foods.index')->with('failed', 'اطلاعات رستوران را تکمیل کنید.');
+                return redirect()->route('foods.index')->with('failed', 'اطلاعات رستوران رو تکمیل کن.');
             }
         } else {
             return redirect()->route('auth.login');
         }
     }
+
 
 // Edit a food item form
     public function edit(Food $food)
