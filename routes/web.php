@@ -95,6 +95,7 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::delete('/seller/foods/{food}', [FoodController::class, 'destroy'])->name('foods.destroy');
     Route::get('/seller/foods/index', [FoodController::class, 'index'])->name('foods.index');
     Route::get('/seller/foods/{food}', [FoodController::class, 'show'])->name('foods.show');
+
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 
 

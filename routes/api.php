@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\FoodController;
 use App\Http\Controllers\Api\RestaurantsController;
 use App\Http\Controllers\RestaurantController;
@@ -30,12 +31,16 @@ Route::post('logout',[AuthController::class,'logout']);
 
 Route::middleware('auth:sanctum')->group(function(){
 
-    Route::post('logout',[AuthController::class,'logout'],);
-
     Route::get('restaurants/{restaurant_id}', [RestaurantsController::class, 'getRestaurantInfo']);
     Route::get('restaurants', [RestaurantsController::class, 'getRestaurants']);
 
     Route::get('restaurants/{restaurant_id}/foods',[FoodController::class,'getFoods']);
+
+    Route::post('/cart/add', [CartController::class,'addItem']);
+    Route::get('/cart', [CartController::class, 'viewCart']);
+
+    Route::delete('/cart/remove/{food_id}', [CartController::class,'removeItem']);
+    Route::delete('/cart/clear', [CartController::class,'clearCart']);
 
 });
 
