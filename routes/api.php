@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\FoodController;
 use App\Http\Controllers\Api\RestaurantsController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\RestaurantController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,15 +35,19 @@ Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('restaurants/{restaurant_id}', [RestaurantsController::class, 'getRestaurantInfo']);
     Route::get('restaurants', [RestaurantsController::class, 'getRestaurants']);
-
     Route::get('restaurants/{restaurant_id}/foods',[FoodController::class,'getFoods']);
 
     Route::post('/cart/add', [CartController::class,'addItem']);
     Route::get('/cart', [CartController::class, 'viewCart']);
-
     Route::delete('/cart/remove/{food_id}', [CartController::class,'removeItem']);
     Route::delete('/cart/clear', [CartController::class,'clearCart']);
 
+
+    Route::get('/addresses', [AddressController::class,'index']);
+    Route::post('/addresses', [AddressController::class,'store']);
+    Route::post('/addresses/current', [AddressController::class,'setCurrent']);
+
+    Route::patch('/personal-info', [UserController::class,'update']);
 });
 
 // help :  https://stackoverflow.com/questions/66991646/how-to-resolve-unauthenticated-issue-in-postman-get-request

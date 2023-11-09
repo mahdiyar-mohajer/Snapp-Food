@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('addressable');
-            $table->integer('point');
-            $table->integer('lat');
-            $table->integer('lng');
+            $table->string('title');
+            $table->string('address');
+            $table->decimal('latitude', 10, 8);
+            $table->decimal('longitude', 11, 8);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->timestamps();
         });

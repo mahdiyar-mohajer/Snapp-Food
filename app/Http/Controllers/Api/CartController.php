@@ -4,105 +4,49 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Food;
+use App\Models\Resturant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 
 class CartController extends Controller
 {
-//    public function addItem(Request $request)
-//    {
-//        $foodId = $request->input('food_id');
-//        $quantity = $request->input('quantity', 1);
-//        $foodItem = Food::find($foodId);
-//
-//        if (!$foodItem) {
-//            return response()->json(['message' => 'Food item not found'], 404);
-//        }
-//        if (!$request->session()->has('cart')) {
-//            $request->session()->put('cart', []);
-//        }
-//
-//        $cart = $request->session()->get('cart');
-//
-//        if (array_key_exists($foodId, $cart)) {
-//            $cart[$foodId]['quantity'] += $quantity;
-//        } else {
-//            $cart[$foodId] = [
-//                'food' => $foodItem,
-//                'quantity' => $quantity,
-//            ];
-//        }
-//
-//        $request->session()->put('cart', $cart);
-//
-//        return response()->json(['message' => 'Food item added to cart'], 200);
-//    }
-//
-//    public function removeItem(Request $request, $foodId)
-//    {
-//        $cart = $request->session()->get('cart');
-//
-//        if (array_key_exists($foodId, $cart)) {
-//            unset($cart[$foodId]);
-//            $request->session()->put('cart', $cart);
-//
-//            return response()->json(['message' => 'Food item removed from cart'], 200);
-//        }
-//
-//        return response()->json(['message' => 'Food item not found in the cart'], 404);
-//    }
-//    public function viewCart(Request $request)
-//    {
-//        $cart = $request->session()->get('cart', []);
-//
-//        $totalPrice = 0;
-//
-//        foreach ($cart as $foodId => $cartItem) {
-//            $foodItem = $cartItem['food'];
-//            $quantity = $cartItem['quantity'];
-//            $totalPrice += $foodItem->price * $quantity;
-//        }
-//
-//        return response()->json([
-//            'cart' => $cart,
-//            'total_price' => $totalPrice,
-//        ], 200);
-//    }
-//
-//    public function clearCart(Request $request)
-//    {
-//        $request->session()->forget('cart');
-//
-//        return response()->json(['message' => 'Cart cleared'], 200);
-//    }
 
     public function addItem(Request $request)
     {
         $foodId = $request->input('food_id');
         $quantity = $request->input('quantity', 1);
-        $foodItem = Food::find($foodId);
+        $restaurantId = $request->input('resturant_id');
 
+        $foodItem = Food::where('resturant_id', $restaurantId)->find($foodId);
         if (!$foodItem) {
-            return response()->json(['message' => 'Food item not found'], 404);
+            return response()->json(['message' => 'غذا پیدا نشد'], 404);
         }
+
+        $restaurant = Resturant::find($restaurantId);
+        if (!$restaurant) {
+            return response()->json(['message' => 'رستوران پیدا نشد'], 404);
+        }
+        $cartId = Str::uuid();
+        $cartKey = $restaurantId . '_' . $foodId . '_' . $cartId;
 
         $cart = (array) Redis::hgetall('cart');
 
-        if (array_key_exists($foodId, $cart)) {
-            $cartItem = json_decode($cart[$foodId], true);
+        if (array_key_exists($cartKey, $cart)) {
+            $cartItem = json_decode($cart[$cartKey], true);
             $cartItem['quantity'] = isset($cartItem['quantity']) ? $cartItem['quantity'] + $quantity : $quantity;
         } else {
             $cartItem = [
+                'id' => $cartId,
                 'food' => $foodItem,
                 'quantity' => $quantity,
             ];
         }
 
-        $cart[$foodId] = json_encode($cartItem);
-
+        $cart[$cartKey] = json_encode($cartItem);
         Redis::hmset('cart', $cart);
 
-        return response()->json(['message' => 'Food item added to cart'], 200);
+        return response()->json(['message' => 'غذا به سبد خرید اضافه شد'], 200);
     }
 
     public function removeItem(Request $request, $foodId)
@@ -112,36 +56,61 @@ class CartController extends Controller
 
             if ($cartItem !== null) {
                 Redis::hdel('cart', $foodId);
-
-                return response()->json(['message' => 'Food item removed from cart'], 200);
+                return response()->json(['message' => 'غذا از سبد خرید حذف شد'], 200);
             }
         }
 
-        return response()->json(['message' => 'Food item not found in the cart'], 404);
+        return response()->json(['message' => 'غذای مورد نظر در سبد خرید پیدا نشد'], 404);
     }
 
     public function viewCart(Request $request)
     {
         $cart = (array) Redis::hgetall('cart');
-
         $totalPrice = 0;
-        foreach ($cart as $foodId => $cartItem) {
+        $cartDetails = [];
+
+        foreach ($cart as $cartKey => $cartItem) {
             $cartItem = json_decode($cartItem, true);
-            $foodItem = Food::find($cartItem['food']['id'] ?? null); // Update this line
-            $quantity = $cartItem['quantity'];
-            if ($foodItem) {
-                $totalPrice += $foodItem->price * $quantity;
-                $cart[$foodId] = [
-                    'food' => $foodItem,
-                    'quantity' => $quantity,
-                ];
-            } else {
-                unset($cart[$foodId]);
+
+            if (str_contains($cartKey, '_')) {
+                [$restaurantId, $foodId] = explode('_', $cartKey);
+                $foodItem = Food::where('resturant_id', $restaurantId)->find($foodId);
+                $quantity = $cartItem['quantity'];
+
+                if ($foodItem) {
+                    $restaurant = Resturant::find($restaurantId);
+
+                    if ($restaurant) {
+                        $totalPrice += $foodItem->price * $quantity;
+
+                        if (!isset($cartDetails[$restaurantId])) {
+                            $cartDetails[$restaurantId] = [
+                                'restaurant' => [
+                                    'id' => $restaurant->id,
+                                    'name' => $restaurant->name,
+                                    'image' => $restaurant->image_url,
+                                ],
+                                'items' => [],
+                            ];
+                        }
+
+                        $cartDetails[$restaurantId]['items'][] = [
+                            'id' => $foodItem->id,
+                            'name' => $foodItem->name,
+                            'quantity' => $quantity,
+                            'price' => $foodItem->price,
+                        ];
+                    } else {
+                        unset($cart[$cartKey][0]);
+                    }
+                } else {
+                    unset($cart[$cartKey]);
+                }
             }
         }
 
         return response()->json([
-            'cart' => $cart,
+            'carts' => array_values($cartDetails),
             'total_price' => $totalPrice,
         ], 200);
     }
@@ -149,7 +118,6 @@ class CartController extends Controller
     public function clearCart(Request $request)
     {
         Redis::del('cart');
-
-        return response()->json(['message' => 'Cart cleared'], 200);
+        return response()->json(['message' => 'سبد خرید خالی شد'], 200);
     }
 }
