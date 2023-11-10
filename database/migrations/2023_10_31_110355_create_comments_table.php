@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->text('comment');
-            $table->string('parent');
+            $table->integer('rating');
+//            $table->string('parent');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('resturant_id')->nullable();
+            $table->unsignedBigInteger('food_id')->nullable();
             $table->timestamps();
         });
     }

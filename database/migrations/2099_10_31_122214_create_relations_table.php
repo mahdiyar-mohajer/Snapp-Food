@@ -16,6 +16,7 @@ return new class extends Migration
         });
         Schema::table('comments', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('food_id')->references('id')->on('foods');
             $table->foreign('resturant_id')->references('id')->on('resturants');
         });
         Schema::table('resturants', function (Blueprint $table) {

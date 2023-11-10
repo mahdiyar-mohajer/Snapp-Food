@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\CommentController;
 use App\Http\Controllers\Api\FoodController;
 use App\Http\Controllers\Api\RestaurantsController;
 use App\Http\Controllers\Api\UserController;
@@ -48,6 +49,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/addresses/current', [AddressController::class,'setCurrent']);
 
     Route::patch('/personal-info', [UserController::class,'update']);
+
+    Route::get('/comments', [CommentController::class, 'getComments']);
+    Route::post('/comments', [CommentController::class, 'postComment']);
+
 });
 
 // help :  https://stackoverflow.com/questions/66991646/how-to-resolve-unauthenticated-issue-in-postman-get-request

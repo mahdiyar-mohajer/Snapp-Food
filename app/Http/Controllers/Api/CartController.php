@@ -43,6 +43,8 @@ class CartController extends Controller
             ];
         }
 
+        $cartItem['cart_id'] = $cartId;
+
         $cart[$cartKey] = json_encode($cartItem);
         Redis::hmset('cart', $cart);
 
@@ -73,7 +75,7 @@ class CartController extends Controller
             $cartItem = json_decode($cartItem, true);
 
             if (str_contains($cartKey, '_')) {
-                [$restaurantId, $foodId] = explode('_', $cartKey);
+                [$restaurantId, $foodId, $cartId] = explode('_', $cartKey);
                 $foodItem = Food::where('resturant_id', $restaurantId)->find($foodId);
                 $quantity = $cartItem['quantity'];
 
@@ -85,10 +87,11 @@ class CartController extends Controller
 
                         if (!isset($cartDetails[$restaurantId])) {
                             $cartDetails[$restaurantId] = [
+                                'cart_id' => $cartId,
                                 'restaurant' => [
                                     'id' => $restaurant->id,
                                     'name' => $restaurant->name,
-                                    'image' => $restaurant->image_url,
+                                    'image' => $restaurant->image,
                                 ],
                                 'items' => [],
                             ];
@@ -97,6 +100,7 @@ class CartController extends Controller
                         $cartDetails[$restaurantId]['items'][] = [
                             'id' => $foodItem->id,
                             'name' => $foodItem->name,
+                            'image' => $foodItem->image,
                             'quantity' => $quantity,
                             'price' => $foodItem->price,
                         ];
