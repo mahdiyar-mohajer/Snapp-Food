@@ -20,6 +20,7 @@
                 <th class="px-6 py-3 text-xs font-medium text-gray-600 text-right uppercase">ایمیل</th>
                 <th class="px-6 py-3 text-xs font-medium text-gray-600 text-right uppercase">نام</th>
                 <th class="px-6 py-3 text-xs font-medium text-gray-600 text-right uppercase">تلفن</th>
+                <th class="px-6 py-3 text-xs font-medium text-gray-600 text-right uppercase">اسم رستوران</th>
                 <th class="px-6 py-3 text-xs font-medium text-gray-600 text-center uppercase">وظعیت</th>
                 <th class="px-6 py-3 text-xs font-medium text-gray-600 text-center uppercase">ارتقا</th>
             </tr>
@@ -30,6 +31,7 @@
                     <td class="px-6 py-4 text-right">{{ $user['email'] }}</td>
                     <td class="px-6 py-4 text-right">{{ $user['name'] }}</td>
                     <td class="px-6 py-4 text-right">{{ $user['phone'] }}</td>
+                    <td class="px-6 py-4 text-right">{{ $user->resturant->name ?? 'No restaurant name' }}</td>
                     <td class="px-6 py-4 text-center">
                         @if ($user->email !== 'mahdiyar@gmail.com') {{-- Add this condition --}}
                         @if ($user->status === 'active')

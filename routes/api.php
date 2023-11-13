@@ -21,62 +21,86 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/hello', function () {
-    return "Hello World!";
+//Route::get('/hello', function () {
+//    return "Hello World!";
+//});
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+        Route::patch('personal-info', [UserController::class, 'update']);
+
+
+    // region restaurants
+    Route::prefix('restaurants')->group(function () {
+        Route::get('/', [RestaurantsController::class, 'getRestaurants']);
+        Route::get('{restaurant_id}', [RestaurantsController::class, 'getRestaurantInfo']);
+        Route::get('{restaurant_id}/foods', [FoodController::class, 'getFoods']);
+    });
+    // endregion
+
+    // region cart
+    Route::prefix('cart')->group(function () {
+        Route::post('add', [CartController::class, 'addItem']);
+        Route::get('/', [CartController::class, 'viewCart']);
+        Route::delete('remove/{food_id}', [CartController::class, 'removeItem']);
+        Route::delete('clear', [CartController::class, 'clearCart']);
+        Route::put('{foodId}', [CartController::class, 'updateCartItem']);
+    });
+    // endregion
+
+    // region addresses
+    Route::prefix('addresses')->group(function () {
+        Route::get('/', [AddressController::class, 'index']);
+        Route::post('/', [AddressController::class, 'store']);
+        Route::post('current', [AddressController::class, 'setCurrent']);
+    });
+    // endregion
+
+    // region comments
+    Route::prefix('comments')->group(function () {
+        Route::get('/', [CommentController::class, 'getComments']);
+        Route::post('/', [CommentController::class, 'postComment']);
+    });
+    // endregion
+
 });
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::post('register',[AuthController::class,'register'],);
-Route::post('login',[AuthController::class,'login'],);
-Route::post('logout',[AuthController::class,'logout']);
-
-Route::middleware('auth:sanctum')->group(function(){
-
-    Route::get('restaurants/{restaurant_id}', [RestaurantsController::class, 'getRestaurantInfo']);
-    Route::get('restaurants', [RestaurantsController::class, 'getRestaurants']);
-    Route::get('restaurants/{restaurant_id}/foods',[FoodController::class,'getFoods']);
-
-    Route::post('/cart/add', [CartController::class,'addItem']);
-    Route::get('/cart', [CartController::class, 'viewCart']);
-    Route::delete('/cart/remove/{food_id}', [CartController::class,'removeItem']);
-    Route::delete('/cart/clear', [CartController::class,'clearCart']);
 
 
-    Route::get('/addresses', [AddressController::class,'index']);
-    Route::post('/addresses', [AddressController::class,'store']);
-    Route::post('/addresses/current', [AddressController::class,'setCurrent']);
-
-    Route::patch('/personal-info', [UserController::class,'update']);
-
-    Route::get('/comments', [CommentController::class, 'getComments']);
-    Route::post('/comments', [CommentController::class, 'postComment']);
-
-});
-
-// help :  https://stackoverflow.com/questions/66991646/how-to-resolve-unauthenticated-issue-in-postman-get-request
-
-
-
-//use App\Http\Controllers\api\AddressController;
-//use App\Http\Controllers\api\CartController;
-//use App\Http\Controllers\api\CommentController;
+//Route::post('register',[AuthController::class,'register'],);
+//Route::post('login',[AuthController::class,'login'],);
+//Route::post('logout',[AuthController::class,'logout']);
+//
+//Route::middleware('auth:sanctum')->group(function(){
+//
+//    Route::get('restaurants/{restaurant_id}', [RestaurantsController::class, 'getRestaurantInfo']);
+//    Route::get('restaurants', [RestaurantsController::class, 'getRestaurants']);
+//    Route::get('restaurants/{restaurant_id}/foods',[FoodController::class,'getFoods']);
+//
+//    Route::post('/cart/add', [CartController::class,'addItem']);
+//    Route::get('/cart', [CartController::class, 'viewCart']);
+//    Route::delete('/cart/remove/{food_id}', [CartController::class,'removeItem']);
+//    Route::delete('/cart/clear', [CartController::class,'clearCart']);
+//    Route::put('/cart/{foodId}', [CartController::class,'updateCartItem']);
 //
 //
-//Route::middleware('auth:sanctum')->name('user.')->group(function () {
-//    Route::post('/carts/{cart}/pay',[CartController::class,'pay']);
-//    Route::get('/carts',[CartController::class,'index']);
-//    Route::post('/carts/add',[CartController::class,'store']);
-//    Route::patch('/carts/add',[CartController::class,'update']);
+//    Route::get('/addresses', [AddressController::class,'index']);
+//    Route::post('/addresses', [AddressController::class,'store']);
+//    Route::post('/addresses/current', [AddressController::class,'setCurrent']);
 //
-//    Route::get('/comments',[CommentController::class,'index']);
-//    Route::post('/comments',[CommentController::class,'store']);
+//    Route::patch('/personal-info', [UserController::class,'update']);
 //
-//    Route::post('/addresses/{address}',[AddressController::class,'setCurrentAddress']);
-//    Route::apiResource('addresses', AddressController::class)->only(['index', 'store']);
-//    Route::apiResource('restaurants', RestaurantController::class)->only(['index', 'show']);
+//    Route::get('/comments', [CommentController::class, 'getComments']);
+//    Route::post('/comments', [CommentController::class, 'postComment']);
 //
 //});
+
+
 
 

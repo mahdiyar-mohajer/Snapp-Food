@@ -19,7 +19,7 @@ class CommentController extends Controller
             ->with('user:name')
             ->get();
 
-        return response()->json($comments);
+        return response()->json($comments,200);
     }
     public function postComment(Request $request)
     {
@@ -42,6 +42,6 @@ class CommentController extends Controller
 
         $comment->save();
 
-        return response()->json(['message' => 'کامنت با موفقیت اضافه شد']);
+        return response()->json(['message' => 'کامنت با موفقیت اضافه شد'], 201);
     }
 }

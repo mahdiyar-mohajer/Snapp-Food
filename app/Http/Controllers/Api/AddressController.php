@@ -27,7 +27,6 @@ class AddressController
                 'longitude' => 'required|numeric',
             ]);
 
-            // Assuming you have a User model and a relationship between User and Address models
             $user = auth()->user(); // Get the authenticated user
 
             $address = new Address([

@@ -124,4 +124,35 @@ class CartController extends Controller
         Redis::del('cart');
         return response()->json(['message' => 'سبد خرید خالی شد'], 200);
     }
+    public function updateCartItem(Request $request, $foodId)
+    {
+        $quantity = $request->input('quantity');
+
+        if (!is_numeric($quantity) || $quantity <= 0) {
+            return response()->json(['message' => 'مقدار نامعتبر برای تعداد وارد شده است'], 400);
+        }
+
+        $cartKey = $foodId;
+        $cart = (array) Redis::hgetall('cart');
+
+        if (array_key_exists($cartKey, $cart)) {
+            $cartItem = json_decode($cart[$cartKey], true);
+            $cartItem['quantity'] = $quantity;
+
+            $foodItem = Food::find($foodId);
+
+            if ($foodItem) {
+                $cart[$cartKey] = json_encode($cartItem);
+                Redis::hmset('cart', $cart);
+
+                return response()->json(['message' => 'تعداد آیتم در سبد خرید به‌روز شد'], 200);
+            } else {
+                unset($cart[$cartKey]);
+                Redis::hmset('cart', $cart);
+                return response()->json(['message' => 'غذای مورد نظر در سبد خرید پیدا نشد'], 404);
+            }
+        }
+
+        return response()->json(['message' => 'غذای مورد نظر در سبد خرید پیدا نشد'], 404);
+    }
 }

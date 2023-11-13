@@ -14,6 +14,8 @@ class Resturant extends Model
         'phone_number',
         'start_time',
         'end_time',
+        'ship_price',
+        'status',
     ];
     public function user()
     {

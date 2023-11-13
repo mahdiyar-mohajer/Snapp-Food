@@ -13,7 +13,9 @@ class RestaurantController extends Controller
 {
     public function profile()
     {
-        return view('seller.resturant-profile');
+        $user = auth()->user();
+        $restaurants = $user->resturant;
+        return view('seller.resturant-profile', compact('restaurants'));
     }
 
     public function updateProfile(Request $request)
@@ -78,6 +80,42 @@ class RestaurantController extends Controller
         $restaurant->save();
 
         return redirect()->back();
+    }
+
+
+
+    public function index()
+    {
+        $restaurants = Resturant::all();
+        $users = User::all();
+        return view('admin.restaurants.index', compact('restaurants', 'users'));
+    }
+
+    public function edit(Resturant $restaurant)
+    {
+        return view('admin.restaurants.edit', compact('restaurant'));
+    }
+
+    public function update(Resturant $restaurant)
+    {
+        $validated = request()->validate([
+            'name' => 'required',
+            'phone_number' => 'required',
+            'start_time' => 'required|date_format:H:i',
+            'end_time' => 'required|date_format:H:i|after:start_time',
+            'ship_price' => 'required',// Adjust the image validation rules as needed
+        ]);
+
+        $restaurant->update($validated);
+
+        return redirect()->route('restaurants.index');
+    }
+
+    public function destroy(Resturant $restaurant)
+    {
+        $restaurant->delete();
+
+        return redirect()->route('restaurants.index');
     }
 }
 

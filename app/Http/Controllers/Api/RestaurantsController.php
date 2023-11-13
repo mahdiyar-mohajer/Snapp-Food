@@ -9,15 +9,15 @@ class RestaurantsController extends Controller
 {
     public function getRestaurantInfo($restaurant_id)
     {
-        $restaurant = Resturant::with('user')->find($restaurant_id); // Use 'find' to retrieve a specific restaurant by its ID.
+        $restaurant = Resturant::with('user')->find($restaurant_id);
 
         if (!$restaurant) {
-            return response()->json(['message' => 'Restaurant not found'], 404);
+            return response()->json(['message' => 'رستوران پیدا نشد'], 404);
         }
 
         return response()->json([
             'restaurant' => $restaurant,
-        ]);
+        ],200);
     }
 
     public function getRestaurants()
@@ -26,7 +26,7 @@ class RestaurantsController extends Controller
 
         return response()->json([
             'restaurants' => $restaurants,
-        ]);
+        ],200);
     }
 
 

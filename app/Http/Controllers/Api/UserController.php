@@ -50,12 +50,12 @@ class UserController extends Controller
                 'email' => 'required|email',
             ]);
 
-            $user = User::find($request->id);
-            if (!$user) {
-                return response()->json([
-                    'message' => 'یوزر پیدا نشد',
-                ], 404);
-            }
+            $user = User::query()->findOrFail($request->id);
+//            if (!$user) {
+//                return response()->json([
+//                    'message' => 'یوزر پیدا نشد',
+//                ], 404);
+//            }
 
             $user->update([
                 'name' => $request->name,

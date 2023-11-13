@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Resturant;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
@@ -11,7 +12,7 @@ class AdminController extends Controller
     public function index()
     {
 //        $users = User::query()->get()->all();
-        $users = User::query()->paginate(5);
+        $users = User::with('resturant')->paginate(5);
         return view('admin.dashboard', compact('users'));
     }
     public function create()

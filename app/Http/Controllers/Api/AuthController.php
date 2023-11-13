@@ -25,10 +25,10 @@ class AuthController extends Controller
             ]);
         }
         $token = $user->createToken('userToken')->plainTextToken;
-        return [
+        return response()->json([
             'token' => $token,
-            'message' => 'به مکتب فود خوش آمدین'
-        ];
+            'message' => 'به مکتب فود خوش آمدین',
+        ], 200);
     }
 
 
@@ -51,10 +51,10 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('userToken')->plainTextToken;
-        return [
+        return response()->json([
             'token' => $token,
             'message' => 'ثبت نام با موفقیت انجام شد',
-        ];
+        ], 201);
     }
 
 
@@ -64,6 +64,6 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'شما خارج شدین',
-        ]);
+        ], 200);
     }
 }

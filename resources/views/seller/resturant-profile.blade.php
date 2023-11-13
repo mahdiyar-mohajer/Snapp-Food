@@ -1,6 +1,12 @@
 @extends('seller.layout.app')
 @section('title', 'صفحه فروشنده')
-
+{{--<div class="mb-4">--}}
+{{--    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Name:</label>--}}
+{{--    <input type="text" name="name" id="name" value="{{ old('name', $restaurant->name) }}" class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">--}}
+{{--    @error('name')--}}
+{{--    <p class="text-red-500 text-xs italic">{{ $message }}</p>--}}
+{{--    @enderror--}}
+{{--</div>--}}
 @section('content')
 
 
@@ -14,38 +20,38 @@
                 <div class="mb-4">
                     <label for="name" class="block text-gray-600">Restaurant Name</label>
                     <input type="text" name="name" id="name" class="border rounded px-4 py-2 w-full"
-                           value="{{ old('name') }}" required>
+                           value="{{ old('name', optional($restaurants)->name) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="phone_number" class="block text-gray-600">Phone Number</label>
                     <input type="text" name="phone_number" id="phone_number" class="border rounded px-4 py-2 w-full"
-                           value="{{ old('phone_number') }}" required>
+                           value="{{ old('phone_number', optional($restaurants)->phone_number) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="start_time" class="block text-gray-600">Opening Time</label>
                     <input type="time" name="start_time" id="start_time" class="border rounded px-4 py-2 w-full"
-                           value="{{ old('start_time') }}" required>
+                           value="{{ old('start_time', optional($restaurants)->start_time) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="end_time" class="block text-gray-600">Closing Time</label>
                     <input type="time" name="end_time" id="end_time" class="border rounded px-4 py-2 w-full"
-                           value="{{ old('end_time') }}" required>
+                           value="{{ old('end_time', optional($restaurants)->end_time) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="ship_price" class="block text-gray-600">Shipping Price</label>
                     <input type="number" name="ship_price" id="ship_price" class="border rounded px-4 py-2 w-full"
-                           value="{{ old('ship_price') }}" required>
+                           value="{{ old('ship_price', optional($restaurants)->ship_price) }}" required>
                 </div>
 
                 <div class="mb-4">
                     <label for="status" class="block text-gray-600">Status</label>
                     <select name="status" id="status" class="border rounded px-4 py-2 w-full" required>
-                        <option value="1" {{ old('status') == 1 ? 'selected' : '' }}>Open</option>
-                        <option value="0" {{ old('status') == 0 ? 'selected' : '' }}>Closed</option>
+                        <option value="1" {{ old('status', optional($restaurants)->status) == 1 ? 'selected' : '' }}>Open</option>
+                        <option value="0" {{ old('status', optional($restaurants)->status) == 0 ? 'selected' : '' }}>Closed</option>
                     </select>
                 </div>
 
