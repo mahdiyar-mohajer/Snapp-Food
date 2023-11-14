@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\ResturantCategory;
 use Illuminate\Http\Request;
 use App\Models\Resturant;
 use App\Models\User;
@@ -13,9 +14,10 @@ class RestaurantController extends Controller
 {
     public function profile()
     {
+        $resturantCategories = ResturantCategory::all();
         $user = auth()->user();
         $restaurants = $user->resturant;
-        return view('seller.resturant-profile', compact('restaurants'));
+        return view('seller.resturant-profile', compact('restaurants','resturantCategories'));
     }
 
     public function updateProfile(Request $request)
@@ -30,6 +32,7 @@ class RestaurantController extends Controller
             $restaurant->user_id = $user->id;
         }
 
+
         $restaurant->name = $request->input('name');
         $restaurant->phone_number = $request->input('phone_number');
         $restaurant->start_time = $request->input('start_time');
@@ -38,7 +41,15 @@ class RestaurantController extends Controller
         $restaurant->status = $request->input('status');
         $restaurant->profile_complete = true;
         $restaurant->save();
+        if (!$restaurant->categoriesSet) {
 
+            $request->validate([
+                'resturantCategories' => 'required|array',
+            ]);
+            $restaurant->resturantCategories()->sync($request->input('resturantCategories'));
+
+            $restaurant->categoriesSet = true;
+        }
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
             $restaurantEmail = $restaurant->user->email;

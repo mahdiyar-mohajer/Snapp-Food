@@ -10,12 +10,12 @@ class Resturant extends Model
     use HasFactory;
     protected $table = 'resturants';
     protected $fillable = [
-        'name',
-        'phone_number',
-        'start_time',
-        'end_time',
-        'ship_price',
-        'status',
+        'name' => '',
+        'phone_number' => '',
+        'start_time' => '',
+        'end_time' => '',
+        'ship_price' => '',
+        'status' => '',
     ];
     public function user()
     {
@@ -55,8 +55,8 @@ class Resturant extends Model
     {
         return $this->morphOne(Image::class, 'imageable');
     }
-    public function categories()
+    public function resturantCategories()
     {
-        return $this->belongsToMany(ResturantCategory::class);
+        return $this->belongsToMany(ResturantCategory::class,'resturants_resturant_categories');
     }
 }

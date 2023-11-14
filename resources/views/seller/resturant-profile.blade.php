@@ -16,7 +16,15 @@
 
             <form action="{{ route('resturant.updateProfile') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-
+                <div class="mb-4">
+                    <label class="block text-gray-600 mb-2">Select Categories:</label>
+                    @foreach($resturantCategories as $category)
+                        <div class="flex items-center mb-2">
+                            <input type="checkbox" name="resturantCategories[]" id="category{{ $category->id }}" value="{{ $category->id }}" class="mr-2">
+                            <label for="category{{ $category->id }}">{{ $category->name }}</label>
+                        </div>
+                    @endforeach
+                </div>
                 <div class="mb-4">
                     <label for="name" class="block text-gray-600">Restaurant Name</label>
                     <input type="text" name="name" id="name" class="border rounded px-4 py-2 w-full"

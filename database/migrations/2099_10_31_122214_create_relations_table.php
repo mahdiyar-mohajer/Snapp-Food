@@ -57,7 +57,7 @@ return new class extends Migration
         });
         Schema::table('resturants_resturant_categories', function (Blueprint $table) {
             $table->foreign('resturant_id')->references('id')->on('resturants')->onDelete('cascade');
-            $table->foreign('category_id')->references('id')->on('resturant_categories')->onDelete('cascade');
+            $table->foreign('resturant_category_id')->references('id')->on('resturant_categories')->onDelete('cascade');
         });
 
     }

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('resturants_resturant_categories', function (Blueprint $table) {
             $table->unsignedBigInteger('resturant_id')->nullable();
-            $table->unsignedBigInteger('category_id')->nullable();
+            $table->unsignedBigInteger('resturant_category_id')->nullable();
         });
     }
 

@@ -13,6 +13,6 @@ class ResturantCategory extends Model
     protected $fillable = ['name'];
     public function resturants()
     {
-        return $this->belongsToMany(Resturant::class);
+        return $this->belongsToMany(Resturant::class,'resturants_resturant_categories');
     }
 }
