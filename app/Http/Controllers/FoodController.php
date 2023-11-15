@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Food;
+use App\Models\FoodCategory;
 use App\Models\Image;
 use App\Models\Resturant;
+use App\Models\ResturantCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +35,8 @@ class FoodController extends Controller
 
     public function create()
     {
-        return view('foods.create');
+        $foodCategories = FoodCategory::all();
+        return view('foods.create', compact('foodCategories'));
     }
 
 // Store a new food item
@@ -43,6 +46,7 @@ class FoodController extends Controller
             'name' => 'required|string',
             'raw_material' => 'required|string',
             'price' => 'required|numeric',
+            'foodCategories' => 'required|array',
         ]);
 
         $user = Auth::user();
@@ -56,6 +60,8 @@ class FoodController extends Controller
                     'raw_material' => $request->input('raw_material'),
                     'price' => $request->input('price'),
                 ]);
+                $food->save();
+                $food->foodCategories()->sync($request->input('foodCategories'));
 
                 $food->resturant()->associate($restaurant); // Associate the food with the user's restaurant
                 $food->save();

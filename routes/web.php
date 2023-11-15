@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminFoodCategoryController;
 use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -52,6 +53,13 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('admin/restaurant-categories/{category}/edit', [AdminRestaurantCategoryController::class, 'edit'])->name('restaurant-categories.edit');
     Route::put('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'update'])->name('restaurant-categories.update');
     Route::delete('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'destroy'])->name('restaurant-categories.destroy');
+
+    Route::get('admin/food-categories/create', [AdminFoodCategoryController::class, 'create'])->name('food-categories.create');
+    Route::post('admin/food-categories', [AdminFoodCategoryController::class, 'store'])->name('food-categories.store');
+    Route::get('admin/food-categories', [AdminFoodCategoryController::class, 'index'])->name('food-categories.index');
+    Route::get('admin/food-categories/{category}/edit', [AdminFoodCategoryController::class, 'edit'])->name('food-categories.edit');
+    Route::put('admin/food-categories/{category}', [AdminFoodCategoryController::class, 'update'])->name('food-categories.update');
+    Route::delete('admin/food-categories/{category}', [AdminFoodCategoryController::class, 'destroy'])->name('food-categories.destroy');
 
     Route::post('admin/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('admin.restaurant.toggleActivation');
 

@@ -26,12 +26,12 @@ class Food extends Model
         return $this->hasMany(Comment::class);
     }
 
-    public function foodCategories()
-    {
-        return $this->hasMany(FoodCategory::class);
-    }
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
+    }
+    public function foodCategories()
+    {
+        return $this->belongsToMany(FoodCategory::class,'foods_food_categories');
     }
 }
