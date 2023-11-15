@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Discount extends Model
 {
     use HasFactory;
-    protected $table = 'discount';
-
+    protected $table = 'discounts';
+    protected $fillable = [
+        'start_time','end_time', 'discount'
+    ];
     public function food()
     {
         return $this->belongsTo(Food::class);

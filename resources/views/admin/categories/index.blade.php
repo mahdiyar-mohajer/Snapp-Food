@@ -3,6 +3,17 @@
 
 @section('content')
     <div class="container mx-auto mt-10 p-5">
+        @if(session('success'))
+            <div class="bg-green-200 text-green-800 px-4 py-2 rounded auto-dismiss">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-200 text-red-800 px-4 py-2 rounded auto-dismiss">
+                {{ session('error') }}
+            </div>
+        @endif
         <h1 class="text-2xl font-semibold mb-6">Restaurant Categories</h1>
         <a href="{{ route('restaurant-categories.create') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4 inline-block">Create Category</a>
         <table class="table-auto w-full">

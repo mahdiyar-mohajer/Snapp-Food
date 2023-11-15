@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminDiscountController;
 use App\Http\Controllers\AdminFoodCategoryController;
 use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SellerController;
@@ -61,6 +63,11 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::put('admin/food-categories/{category}', [AdminFoodCategoryController::class, 'update'])->name('food-categories.update');
     Route::delete('admin/food-categories/{category}', [AdminFoodCategoryController::class, 'destroy'])->name('food-categories.destroy');
 
+    Route::get('/admin/discounts', [AdminDiscountController::class, 'index'])->name('admin.discounts.index');
+    Route::get('/admin/discounts/{discount}/edit', [AdminDiscountController::class, 'edit'])->name('admin.discounts.edit');
+    Route::put('/admin/discounts/{discount}', [AdminDiscountController::class, 'update'])->name('admin.discounts.update');
+    Route::delete('/admin/discounts/{discount}', [AdminDiscountController::class, 'destroy'])->name('admin.discounts.destroy');
+
     Route::post('admin/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('admin.restaurant.toggleActivation');
 
     Route::resource('admin/restaurants', RestaurantController::class)->except('show');
@@ -86,6 +93,14 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::delete('/seller/foods/{food}', [FoodController::class, 'destroy'])->name('foods.destroy');
     Route::get('/seller/foods/index', [FoodController::class, 'index'])->name('foods.index');
     Route::get('/seller/foods/{food}', [FoodController::class, 'show'])->name('foods.show');
+
+    Route::get('/seller/foods/{food}/discount/create', [DiscountController::class, 'create'])->name('discounts.create');
+    Route::post('/seller/foods/{food}/discount', [DiscountController::class, 'store'])->name('discounts.store');
+    Route::get('/seller/foods/{food}/discounts', [DiscountController::class, 'show'])->name('discounts.show');
+    Route::get('/seller/foods/{food}/discount/{discount}/edit', [DiscountController::class, 'edit'])->name('discounts.edit');
+    Route::put('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
+    Route::delete('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
+    Route::get('/seller/discounts', [DiscountController::class, 'index'])->name('discounts.index');
 
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 

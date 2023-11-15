@@ -32,15 +32,6 @@ class Resturant extends Model
         return $this->belongsTo(Bank::class);
     }
 
-    public function foodParties()
-    {
-        return $this->hasMany(FoodParty::class);
-    }
-
-    public function discounts()
-    {
-        return $this->hasMany(Discount::class);
-    }
 
     public function foods()
     {
@@ -58,5 +49,13 @@ class Resturant extends Model
     public function resturantCategories()
     {
         return $this->belongsToMany(ResturantCategory::class,'resturants_resturant_categories');
+    }
+    public function discounts()
+    {
+        return $this->hasMany(Discount::class);
+    }
+    public function foodParties()
+    {
+        return $this->hasMany(FoodParty::class);
     }
 }

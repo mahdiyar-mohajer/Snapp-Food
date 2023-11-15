@@ -13,7 +13,7 @@
                 {{ session('error') }}
             </div>
         @endif
-        @yield('content')
+{{--        @yield('content')--}}
     </div>
     @if ($restaurantWithImages)
         <div class="w-2/3 p-4">

@@ -9,6 +9,9 @@ class FoodParty extends Model
 {
     use HasFactory;
     protected $table = 'foods_party';
+    protected $fillable = [
+        'start_time','end_time', 'count', 'discount'
+    ];
     public function food()
     {
         return $this->belongsTo(Food::class);
