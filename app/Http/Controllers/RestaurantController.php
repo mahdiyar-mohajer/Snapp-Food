@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Image;
 use App\Models\ResturantCategory;
 use Illuminate\Http\Request;
@@ -112,8 +113,8 @@ class RestaurantController extends Controller
         $validated = request()->validate([
             'name' => 'required',
             'phone_number' => 'required',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required',
             'ship_price' => 'required',// Adjust the image validation rules as needed
         ]);
 
@@ -128,6 +129,54 @@ class RestaurantController extends Controller
 
         return redirect()->route('restaurants.index');
     }
+
+
+    public function getCoordinates()
+    {
+        return view('seller.coordinate');
+    }
+    public function setCoordinates(Request $request)
+    {
+        // اعتبارسنجی داده‌ها در اینجا انجام شود
+        $title = $request->input('title');
+        $addressText = $request->input('address');
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+
+        // یافتن یوزر فعلی
+        $user = auth()->user();
+
+        // چک کردن برای وجود یا عدم وجود آدرس برای یوزر
+        $existingAddress = $user->address;
+
+        if ($existingAddress) {
+            // اگر آدرس وجود دارد، آن را به‌روز رسانی کنید
+            $existingAddress->update([
+                'title' => $title,
+                'address' => $addressText,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+            ]);
+
+            $message = 'آدرس با موفقیت به‌روز رسانی شد.';
+        } else {
+            // اگر آدرس وجود ندارد، آدرس جدید ایجاد شود
+            $newAddress = Address::create([
+                'title' => $title,
+                'address' => $addressText,
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+            ]);
+
+            // اساین کردن آدرس به یوزر
+            $user->address()->save($newAddress);
+
+            $message = 'آدرس با موفقیت ذخیره شد.';
+        }
+
+        return redirect()->route('resturant.profile')->with('success', $message);
+    }
+
 }
 
 

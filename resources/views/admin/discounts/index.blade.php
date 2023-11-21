@@ -57,6 +57,7 @@
                     @endforeach
                     </tbody>
                 </table>
+                {{ $discounts->links('custom-pagination') }}
             </div>
         @else
             <p class="text-gray-500">No discounts available.</p>

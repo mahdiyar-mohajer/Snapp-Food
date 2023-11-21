@@ -12,7 +12,7 @@ class DiscountController extends Controller
     public function index()
     {
         $foods = Food::all();
-        $discounts = Discount::all();
+        $discounts = Discount::paginate(5);
 
         return view('discounts.index', compact('foods', 'discounts'));
     }

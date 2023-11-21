@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('discounts', function (Blueprint $table) {
             $table->id();
             $table->string('discount');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->string('start_time');
+            $table->string('end_time');
             $table->unsignedBigInteger('food_id')->nullable();
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->timestamps();

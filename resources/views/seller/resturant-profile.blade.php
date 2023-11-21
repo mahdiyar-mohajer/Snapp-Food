@@ -11,6 +11,17 @@
 
 
     <div class="container mx-auto">
+        @if(session('success'))
+            <div class="bg-green-200 text-green-800 px-4 py-2 rounded auto-dismiss">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="bg-red-200 text-red-800 px-4 py-2 rounded auto-dismiss">
+                {{ session('error') }}
+            </div>
+        @endif
         <div class="py-8">
             <h1 class="text-2xl font-semibold mb-4">Complete Your Restaurant Profile</h1>
 
@@ -65,6 +76,9 @@
 
                 <label for="profile_image">Profile Image:</label>
                 <input type="file" name="profile_image" multiple>
+                <div class="mb-4">
+                    <a href="{{ route('get.coordinates') }}">Coordinate</a>
+                </div>
                 <div class="mb-4">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save Profile</button>
                 </div>

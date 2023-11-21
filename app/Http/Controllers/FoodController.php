@@ -22,7 +22,7 @@ class FoodController extends Controller
         if (!$user->resturant) {
             return redirect()->route('resturant.profile')->with('failed', 'اطلاعات رستوران رو تکمیل کن.');
         }
-        $foods = Food::where('resturant_id', Auth::user()->resturant->id)->get();
+        $foods = Food::where('resturant_id', Auth::user()->resturant->id)->paginate(5);
         return view('foods.index', compact('foods'));
     }
 

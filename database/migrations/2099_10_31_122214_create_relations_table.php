@@ -44,7 +44,7 @@ return new class extends Migration
             $table->foreign('food_id')->references('id')->on('foods');
             $table->foreign('resturant_id')->references('id')->on('resturants')->onDelete('cascade');
         });
-        Schema::table('discount', function (Blueprint $table) {
+        Schema::table('discounts', function (Blueprint $table) {
             $table->foreign('food_id')->references('id')->on('foods');
             $table->foreign('resturant_id')->references('id')->on('resturants')->onDelete('cascade');
         });

@@ -56,6 +56,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::put('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'update'])->name('restaurant-categories.update');
     Route::delete('admin/restaurant-categories/{category}', [AdminRestaurantCategoryController::class, 'destroy'])->name('restaurant-categories.destroy');
 
+
     Route::get('admin/food-categories/create', [AdminFoodCategoryController::class, 'create'])->name('food-categories.create');
     Route::post('admin/food-categories', [AdminFoodCategoryController::class, 'store'])->name('food-categories.store');
     Route::get('admin/food-categories', [AdminFoodCategoryController::class, 'index'])->name('food-categories.index');
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::post('admin/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('admin.restaurant.toggleActivation');
 
     Route::resource('admin/restaurants', RestaurantController::class)->except('show');
+
 });
 
 
@@ -84,7 +86,8 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::post('/seller/restaurant/profile', [RestaurantController::class, 'updateProfile'])->name('resturant.updateProfile');
     Route::post('/seller/restaurant/profile/upload-picture', [RestaurantController::class, 'uploadPicture'])->name('resturant.uploadPicture');
     Route::post('/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('restaurant.toggleActivation');
-
+    Route::get('/seller/restaurant/coordinate',[RestaurantController::class, 'getCoordinates'])->name('get.coordinates');
+    Route::post('/seller/restaurant/coordinate',[RestaurantController::class, 'setCoordinates'])->name('set.coordinates');
     // Food Items
     Route::get('/seller/foods/create', [FoodController::class, 'create'])->name('foods.create');
     Route::post('/seller/foods', [FoodController::class, 'store'])->name('foods.store');
@@ -104,8 +107,5 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
 
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 
-
-
 });
-
 

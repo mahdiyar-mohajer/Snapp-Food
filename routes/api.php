@@ -70,6 +70,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
     // endregion
 
+    Route::post('/order/{orderId}/cancel', [CartController::class, 'cancelOrder']);
+    Route::post('/order/{orderId}/confirm', [CartController::class, 'confirmOrder']);
+    Route::get('/orders', [CartController::class, 'viewOrders']);
+    Route::get('/order/{orderId}', [CartController::class, 'viewOrder']);
+    Route::get('/order/{orderId}/status', [CartController::class, 'viewOrderStatus']);
+
 });
 
 

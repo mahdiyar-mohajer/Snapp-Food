@@ -39,7 +39,9 @@
                     <input type="number" name="ship_price" id="ship_price" class="border rounded px-4 py-2 w-full"
                            value="{{ old('ship_price',$restaurant ->ship_price) }}" required>
                 </div>
-
+                <div class="mb-4">
+                    <a href="{{ route('get.coordinates') }}">Coordinate</a>
+                </div>
                 <div class="mb-4">
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save Profile</button>
                 </div>

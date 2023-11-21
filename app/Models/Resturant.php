@@ -10,21 +10,20 @@ class Resturant extends Model
     use HasFactory;
     protected $table = 'resturants';
     protected $fillable = [
-        'name' => '',
-        'phone_number' => '',
-        'start_time' => '',
-        'end_time' => '',
-        'ship_price' => '',
-        'status' => '',
+        'name',
+        'phone_number',
+        'start_time',
+        'end_time',
+        'ship_price',
     ];
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function addresses()
+    public function address()
     {
-        return $this->hasMany(Address::class);
+        return $this->hasOne(Address::class);
     }
 
     public function bank()
@@ -57,5 +56,9 @@ class Resturant extends Model
     public function foodParties()
     {
         return $this->hasMany(FoodParty::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

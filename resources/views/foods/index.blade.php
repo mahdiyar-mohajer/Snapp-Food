@@ -88,6 +88,7 @@
                     @endforeach
                     </tbody>
                 </table>
+                {{ $foods->links('custom-pagination') }}
             </div>
         </div>
     </div>

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string('payment');
-            $table->boolean('total_price');
+            $table->string('payment')->default(null)->nullable();
+            $table->string('total_price');
             $table->tinyInteger('status');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('resturant_id')->nullable();
