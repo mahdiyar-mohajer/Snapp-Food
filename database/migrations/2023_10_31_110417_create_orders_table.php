@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('payment')->default(null)->nullable();
             $table->string('total_price');
-            $table->tinyInteger('status');
+            $table->enum('status', ['PENDING', 'ACCEPT', 'PREPARING', 'DONE'])->default('PENDING');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->unsignedBigInteger('address_id')->nullable();

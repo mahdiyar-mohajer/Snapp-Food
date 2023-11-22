@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SellerController;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +105,12 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::put('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
     Route::delete('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     Route::get('/seller/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+    Route::put('/orders/{orderId}', [OrderController::class, 'update'])->name('orders.update');
+    Route::get('/orders/archived', [OrderController::class, 'archived'])->name('seller.orders.archived');
+
 
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 

@@ -122,14 +122,11 @@ class CartController extends Controller
             return response()->json(['message' => 'رستوران پیدا نشد'], 404);
         }
 
-        // Generate cart key
         $cartId = Str::uuid();
         $cartKey = $restaurantId . '_' . $foodId . '_' . $cartId;
 
-        // Retrieve cart data from Redis
         $cart = (array) Redis::hgetall('cart');
 
-        // Update or add the food item to the cart
         if (array_key_exists($cartKey, $cart)) {
             $cartItem = json_decode($cart[$cartKey], true);
             $cartItem['quantity'] = isset($cartItem['quantity']) ? $cartItem['quantity'] + $quantity : $quantity;
@@ -141,36 +138,27 @@ class CartController extends Controller
             ];
         }
 
-        // Set cart ID
         $cartItem['cart_id'] = $cartId;
 
-        // Update the cart in Redis
         $cart[$cartKey] = json_encode($cartItem);
         Redis::hmset('cart', $cart);
 
-        // Calculate the total price of food items in the cart
         $totalFoodPrice = $this->calculateTotalFoodPrice($cart, $restaurantId);
 
-        // Calculate the shipping price
         $shippingPrice = $restaurant->ship_price;
 
-        // Update the total price of the order
         $totalOrderPrice = $totalFoodPrice + $shippingPrice;
 
-        // Create a new order
         $userId = auth()->user()->id;
         $order = Order::create([
             'user_id' => $userId,
             'total_price' => $totalOrderPrice,
             'resturant_id' => $restaurantId,
-            'status' => 0,
-            // Add other fields as needed
+            'status' => 'PENDING', // Set the default status to 'PENDING'
         ]);
 
-        // Add order items to the order
         $this->addOrderItemsToOrder($cart, $order, $restaurantId);
 
-        // Clear the cart after creating the order
         Redis::del('cart');
 
         return response()->json(['message' => 'سفارش با موفقیت ایجاد شد'], 200);
@@ -343,13 +331,11 @@ class CartController extends Controller
             return response()->json(['message' => 'سفارش پیدا نشد'], 404);
         }
 
-        // چک کنید که سفارش قابل لغو است یا خیر (مثلاً در وضعیت "In Review" قابل لغو نیست)
         if ($order->status !== 0) {
             return response()->json(['message' => 'این سفارش قابل لغو نیست'], 400);
         }
 
-        // انجام عملیات لغو
-        $order->status = -1; // -1 به معنای لغو شده است
+        $order->status = -1;
         $order->save();
 
         return response()->json(['message' => 'سفارش لغو شد'], 200);
@@ -364,19 +350,17 @@ class CartController extends Controller
             return response()->json(['message' => 'سفارش پیدا نشد'], 404);
         }
 
-        // چک کنید که سفارش قابل تایید است یا خیر (مثلاً در وضعیت "In Review" قابل تایید است)
         if ($order->status !== 0) {
             return response()->json(['message' => 'این سفارش قابل تایید نیست'], 400);
         }
 
-        // انجام عملیات تایید
-        $order->status = 1; // 1 به معنای تایید شده است
+
+        $order->status = 1;
         $order->save();
 
         return response()->json(['message' => 'سفارش تایید شد'], 200);
     }
 
-    // متدهای دیگر بر اساس نیاز اضافه شوند
 
     public function viewOrders(Request $request)
     {
