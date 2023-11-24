@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Jobs\SendOrderStatusEmail;
 use App\Models\Order;
 use App\Notifications\OrderStatusNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::where('archived', false)->get();
+        $restaurantId = Auth::user()->resturant->id;
+        $orders = Order::where('archived', false)
+            ->where('resturant_id', $restaurantId)
+            ->get();
+
         return view('seller.order.index', compact('orders'));
     }
 
@@ -25,7 +29,6 @@ class OrderController extends Controller
     {
         $order = Order::findOrFail($orderId);
 
-        // Validate that the selected status is allowed based on the current status
         $request->validate([
             'status' => [
                 'required',
@@ -34,6 +37,10 @@ class OrderController extends Controller
 
                     if (!in_array($value, $allowedStatuses)) {
                         $fail("Invalid status transition from {$order->status} to $value.");
+                    }
+
+                    if ($value === $order->status) {
+                        $fail("Cannot revert to the previous status.");
                     }
                 },
             ],
@@ -62,7 +69,11 @@ class OrderController extends Controller
     }
     public function archived()
     {
-        $archivedOrders = Order::where('archived', true)->get();
+        $restaurantId = Auth::user()->resturant->id;
+        $archivedOrders = Order::where('archived', true)
+            ->where('resturant_id', $restaurantId)
+            ->get();
+
         return view('seller.order.archive', compact('archivedOrders'));
     }
 }

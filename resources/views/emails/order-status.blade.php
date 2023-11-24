@@ -1,1 +1,1 @@
-<p>The order status is now: {{ $orderStatus }}</p>
+<p>وضعیت سفارش شما اکنون: {{ $orderStatus }}</p>

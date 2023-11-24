@@ -49,9 +49,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('cart')->group(function () {
         Route::post('add', [CartController::class, 'addItem']);
         Route::get('/', [CartController::class, 'viewCart']);
-        Route::delete('remove/{food_id}', [CartController::class, 'removeItem']);
+        Route::delete('remove/{foodId}', [CartController::class, 'removeItem']);
         Route::delete('clear', [CartController::class, 'clearCart']);
         Route::put('{foodId}', [CartController::class, 'updateCartItem']);
+
+        Route::get('/orders/{orderId}/status', [CartController::class,'viewOrderStatus'])->name('orders.status');
+
+
+        Route::post('/approve-order/{cartId}', [CartController::class,'approveOrder'])->name('approve.order');
+
     });
     // endregion
 

@@ -37,9 +37,9 @@ class OrderStatusNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line("The order status is now: {$this->status}")
-            ->action('View Order', url('/orders'))
-            ->line('Thank you for using our application!');
+            ->line("وضعیت سفارش شما اکنون: {$this->status}")
+            ->action('دیدن وضعیت', url('/orders'))
+            ->line('ممنون از خریدتون');
     }
 
     /**
