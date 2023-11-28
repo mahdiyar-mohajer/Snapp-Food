@@ -17,7 +17,7 @@ class FoodParty extends Model
         return $this->belongsTo(Food::class);
     }
 
-    public function restaurant()
+    public function resturant()
     {
         return $this->belongsTo(Resturant::class);
     }

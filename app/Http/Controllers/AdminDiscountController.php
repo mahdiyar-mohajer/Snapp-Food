@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DiscountRequest;
 use App\Models\Discount;
 use Illuminate\Http\Request;
 
@@ -18,14 +19,8 @@ class AdminDiscountController extends Controller
         return view('admin.discounts.edit', compact('discount'));
     }
 
-    public function update(Request $request, Discount $discount)
+    public function update(DiscountRequest $request, Discount $discount)
     {
-        $request->validate([
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'discount' => 'required|numeric',
-        ]);
-
         $discount->update([
             'start_time' => $request->input('start_time'),
             'end_time' => $request->input('end_time'),

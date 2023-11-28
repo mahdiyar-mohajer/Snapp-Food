@@ -21,7 +21,11 @@ class CartController extends Controller
         $quantity = $request->input('quantity', 1);
         $restaurantId = $request->input('resturant_id');
 
-        $this->validateRequest($foodId, $restaurantId);
+        $validationResult = $this->validateRequest($foodId, $restaurantId);
+
+        if ($validationResult) {
+            return $validationResult;
+        }
 
         $cart = $this->getCart();
 
@@ -31,7 +35,7 @@ class CartController extends Controller
 
         $totalFoodPrice = $this->calculateTotalFoodPrice($cart, $restaurantId);
 
-        return response()->json(['cart_id' => $cartId, 'total_food_price' => $totalFoodPrice], 200);
+        return response()->json([ 'total_food_price' => $totalFoodPrice], 200);
     }
 
     private function handleCartItem($foodId, $restaurantId, $quantity, $cart)
@@ -88,21 +92,21 @@ class CartController extends Controller
 
         Redis::del('cart');
 
-        return response()->json(['message' => 'سفارش به موفقیت تایید شد.', 'order_id' => $order->id], 200);
+        return response()->json(['message' => 'سفارش با موفقیت تایید شد.', 'order_id' => $order->id], 200);
     }
 
     private function validateRequest($foodId, $restaurantId)
     {
         $foodItem = Food::where('resturant_id', $restaurantId)->find($foodId);
         $restaurant = Resturant::find($restaurantId);
-
+        if (!$restaurant) {
+            return response()->json(['message' => 'رستوران پیدا نشد'], 404);
+        }
         if (!$foodItem) {
             return response()->json(['message' => 'غذا پیدا نشد'], 404);
         }
 
-        if (!$restaurant) {
-            return response()->json(['message' => 'رستوران پیدا نشد'], 404);
-        }
+        return null;
     }
 
     private function getCart()
@@ -304,10 +308,14 @@ class CartController extends Controller
                 'price' => $foodItem->price,
             ];
         }
+//        $shippingPrice =  $restaurant->ship_price;
+
+//        $totalPrice += $shippingPrice;
 
         return response()->json([
             'carts' => array_values($cartDetails),
             'total_price' => $totalPrice,
+//            'shipping_price' => $shippingPrice,
         ], 200);
     }
 

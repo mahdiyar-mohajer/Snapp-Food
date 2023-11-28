@@ -1,13 +1,17 @@
 <?php
 
+use App\Http\Controllers\AdminBannerController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDiscountController;
 use App\Http\Controllers\AdminFoodCategoryController;
+use App\Http\Controllers\AdminFoodPartyController;
 use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\FoodPartyController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RestaurantController;
 use App\Http\Controllers\SellerController;
@@ -24,14 +28,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-Route::get('/dashboard', function () {
-
-    return view('welcome');
-})->name('dashboard');
 
 
 Route::middleware(['web', 'checkStatus'])->group(function () {
@@ -70,7 +68,15 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::put('/admin/discounts/{discount}', [AdminDiscountController::class, 'update'])->name('admin.discounts.update');
     Route::delete('/admin/discounts/{discount}', [AdminDiscountController::class, 'destroy'])->name('admin.discounts.destroy');
 
+    Route::get('/admin/foodParty', [AdminFoodPartyController::class, 'index'])->name('admin.foodParty.index');
+    Route::get('/admin/foodParty/{foodParty}/edit', [AdminFoodPartyController::class, 'edit'])->name('admin.foodParty.edit');
+    Route::put('/admin/foodParty/{foodParty}', [AdminFoodPartyController::class, 'update'])->name('admin.foodParty.update');
+    Route::delete('/admin/foodParty/{foodParty}', [AdminFoodPartyController::class, 'destroy'])->name('admin.foodParty.destroy');
+
     Route::post('admin/restaurant/activate', [RestaurantController::class, 'toggleActivation'])->name('admin.restaurant.toggleActivation');
+
+    Route::resource('admin/banners', AdminBannerController::class);
+
 
     Route::resource('admin/restaurants', RestaurantController::class)->except('show');
 
@@ -105,6 +111,14 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::put('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'update'])->name('discounts.update');
     Route::delete('/seller/foods/{food}/discount/{discount}', [DiscountController::class, 'destroy'])->name('discounts.destroy');
     Route::get('/seller/discounts', [DiscountController::class, 'index'])->name('discounts.index');
+
+    Route::get('/seller/food_parties', [FoodPartyController::class, 'index'])->name('foodParty.index');
+    Route::get('/seller/foods/{food}/food_parties/create', [FoodPartyController::class, 'create'])->name('foodParty.create');
+    Route::post('/seller/foods/{food}/food_parties', [FoodPartyController::class, 'store'])->name('foodParty.store');
+    Route::get('/seller/foods/{food}/food_parties', [FoodPartyController::class, 'show'])->name('foodParty.show');
+    Route::get('/seller/foods/{food}/food_parties/{foodParty}/edit', [FoodPartyController::class, 'edit'])->name('foodParty.edit');
+    Route::put('/seller/foods/{food}/food_parties/{foodParty}', [FoodPartyController::class, 'update'])->name('foodParty.update');
+    Route::delete('/seller/foods/{food}/food_parties/{foodParty}', [FoodPartyController::class, 'destroy'])->name('foodParty.destroy');
 
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');

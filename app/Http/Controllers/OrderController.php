@@ -49,7 +49,7 @@ class OrderController extends Controller
         $order->status = $request->input('status');
         $order->save();
 
-        $order->user->notify(new OrderStatusNotification($order->status));
+//        $order->user->notify(new OrderStatusNotification($order->status));
 
 
 

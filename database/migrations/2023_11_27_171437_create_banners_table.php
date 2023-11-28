@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('foods_party', function (Blueprint $table) {
+        Schema::create('banners', function (Blueprint $table) {
             $table->id();
-            $table->integer('count');
-            $table->string('discount');
-            $table->string('start_time');
-            $table->string('end_time');
-            $table->unsignedBigInteger('food_id')->nullable();
-            $table->unsignedBigInteger('resturant_id')->nullable();
+            $table->string('title');
+            $table->text('text');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('foods_party');
+        Schema::dropIfExists('banners');
     }
 };

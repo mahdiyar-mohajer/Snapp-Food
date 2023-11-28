@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateProfileRequest;
 use App\Models\Address;
 use App\Models\Image;
 use App\Models\ResturantCategory;
@@ -21,10 +22,8 @@ class RestaurantController extends Controller
         return view('seller.resturant-profile', compact('restaurants','resturantCategories'));
     }
 
-    public function updateProfile(Request $request)
+    public function updateProfile(UpdateProfileRequest $request)
     {
-
-
         $user = auth()->user();
         $restaurant = $user->resturant;
 
@@ -33,38 +32,29 @@ class RestaurantController extends Controller
             $restaurant->user_id = $user->id;
         }
 
+        $restaurant->fill($request->only([
+            'name', 'phone_number', 'start_time', 'end_time', 'ship_price', 'status'
+        ]));
 
-        $restaurant->name = $request->input('name');
-        $restaurant->phone_number = $request->input('phone_number');
-        $restaurant->start_time = $request->input('start_time');
-        $restaurant->end_time = $request->input('end_time');
-        $restaurant->ship_price = $request->input('ship_price');
-        $restaurant->status = $request->input('status');
         $restaurant->profile_complete = true;
         $restaurant->save();
+
         if (!$restaurant->categoriesSet) {
-
-            $request->validate([
-                'resturantCategories' => 'required|array',
-            ]);
             $restaurant->resturantCategories()->sync($request->input('resturantCategories'));
-
             $restaurant->categoriesSet = true;
         }
+
         if ($request->hasFile('profile_image')) {
             $image = $request->file('profile_image');
             $restaurantEmail = $restaurant->user->email;
             $randomNumber = rand(10000, 99999);
-
             $folderPath = 'restaurant_images/' . $restaurantEmail;
 
             $extension = $image->getClientOriginalExtension();
             $filename = $restaurantEmail . '_' . $randomNumber . '.' . $extension;
             $path = $image->storeAs($folderPath, $filename, 'public');
 
-
             if ($restaurant->image) {
-
                 $existingImage = $restaurant->image;
                 Storage::disk('public')->delete($existingImage->url);
                 $existingImage->url = $path;
@@ -73,9 +63,9 @@ class RestaurantController extends Controller
                 $imageModel = new Image(['url' => $path]);
                 $restaurant->image()->save($imageModel);
             }
-
-            return redirect()->route('seller.dashboard');
         }
+
+        return redirect()->route('seller.dashboard')->with('success', 'Profile updated successfully');
     }
 
 
@@ -137,20 +127,16 @@ class RestaurantController extends Controller
     }
     public function setCoordinates(Request $request)
     {
-        // اعتبارسنجی داده‌ها در اینجا انجام شود
         $title = $request->input('title');
         $addressText = $request->input('address');
         $latitude = $request->input('latitude');
         $longitude = $request->input('longitude');
 
-        // یافتن یوزر فعلی
         $user = auth()->user();
 
-        // چک کردن برای وجود یا عدم وجود آدرس برای یوزر
         $existingAddress = $user->address;
 
         if ($existingAddress) {
-            // اگر آدرس وجود دارد، آن را به‌روز رسانی کنید
             $existingAddress->update([
                 'title' => $title,
                 'address' => $addressText,
@@ -160,7 +146,6 @@ class RestaurantController extends Controller
 
             $message = 'آدرس با موفقیت به‌روز رسانی شد.';
         } else {
-            // اگر آدرس وجود ندارد، آدرس جدید ایجاد شود
             $newAddress = Address::create([
                 'title' => $title,
                 'address' => $addressText,
@@ -168,7 +153,6 @@ class RestaurantController extends Controller
                 'longitude' => $longitude,
             ]);
 
-            // اساین کردن آدرس به یوزر
             $user->address()->save($newAddress);
 
             $message = 'آدرس با موفقیت ذخیره شد.';

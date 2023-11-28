@@ -2,64 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DiscountRequest;
 use App\Models\Discount;
 use App\Models\Food;
+use App\Models\FoodParty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DiscountController extends Controller
 {
+
     public function index()
     {
-        $foods = Food::all();
-        $discounts = Discount::paginate(5);
-
+        $user = Auth::user();
+        $discounts = $user->resturant->discounts()->paginate(5);
+        $foods = $user->resturant->foods;
         return view('discounts.index', compact('foods', 'discounts'));
     }
 
     public function create($foodId)
     {
-        // Assuming you want to add a discount to a specific food
         $food = Food::findOrFail($foodId);
-
         return view('discounts.create', compact('food'));
     }
 
-    public function store(Request $request, $foodId)
+    public function store(DiscountRequest $request, $foodId)
     {
-        $request->validate([
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'discount' => 'required|numeric',
-        ]);
-
         $food = Food::findOrFail($foodId);
+        $discountData = [
+            'start_time' => $request->input('start_time'),
+            'end_time' => $request->input('end_time'),
+            'discount' => $request->input('discount'),
+        ];
 
-        // Create a new discount
         if ($food->discount) {
-            // If a discount exists, update it
-            $food->discount->update([
-                'start_time' => $request->input('start_time'),
-                'end_time' => $request->input('end_time'),
-                'discount' => $request->input('discount'),
-            ]);
+            $food->discount->update($discountData);
         } else {
-            // If no discount exists, create a new one
-            $discount = new Discount([
-                'start_time' => $request->input('start_time'),
-                'end_time' => $request->input('end_time'),
-                'discount' => $request->input('discount'),
-            ]);
+            $discount = new Discount($discountData);
+            $discount->food()->associate($food);
+            $discount->resturant_id = $food->resturant->id;
+            $discount->save();
         }
-        // Associate the discount with the food
-        $discount->food()->associate($food);
-
-        // Assuming you also want to associate the discount with the restaurant
-        // Replace 'restaurant_id' with the actual foreign key in your Discount model
-        $discount->resturant_id = $food->resturant->id;
-
-        // Save the discount
-        $discount->save();
 
         return redirect()->route('discounts.index', $foodId)
             ->with('success', 'Discount added successfully');
@@ -73,17 +57,10 @@ class DiscountController extends Controller
         return view('discounts.edit', compact('food', 'discount'));
     }
 
-    public function update(Request $request, $foodId, $discountId)
+    public function update(DiscountRequest $request, $foodId, $discountId)
     {
-        $request->validate([
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'discount' => 'required|numeric',
-        ]);
-
         $food = Food::findOrFail($foodId);
         $discount = Discount::findOrFail($discountId);
-
         $discount->update([
             'start_time' => $request->input('start_time'),
             'end_time' => $request->input('end_time'),
@@ -98,12 +75,10 @@ class DiscountController extends Controller
     {
         $food = Food::findOrFail($foodId);
 
-        // Fetch the discounts for the given food
         $discounts = DB::table('discounts')
             ->where('food_id', $foodId)
             ->get();
 
-        // Calculate the discounted prices
         $discountedPrices = [];
         foreach ($discounts as $discount) {
             $discountedPrices[] = [
