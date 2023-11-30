@@ -21,7 +21,7 @@
             <tr>
                 <th class="border-b p-2">#</th>
                 <th class="border-b p-2">اسم</th>
-                <th class="border-b p-2">ایمیل یوزر</th>
+                <th class="border-b p-2">ایمیل</th>
                 <th class="border-b p-2">وضعیت</th>
                 <th class="border-b p-2">اکشن</th>
             </tr>

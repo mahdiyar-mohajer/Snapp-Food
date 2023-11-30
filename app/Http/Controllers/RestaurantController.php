@@ -19,7 +19,7 @@ class RestaurantController extends Controller
         $resturantCategories = ResturantCategory::all();
         $user = auth()->user();
         $restaurants = $user->resturant;
-        return view('seller.resturant-profile', compact('restaurants','resturantCategories'));
+        return view('seller.resturant-profile', compact('restaurants', 'resturantCategories'));
     }
 
     public function updateProfile(UpdateProfileRequest $request)
@@ -33,7 +33,7 @@ class RestaurantController extends Controller
         }
 
         $restaurant->fill($request->only([
-            'name', 'phone_number', 'start_time', 'end_time', 'ship_price', 'status'
+            'name', 'phone_number', 'start_time', 'end_time', 'ship_price', 'status', 'account_number'
         ]));
 
         $restaurant->profile_complete = true;
@@ -85,7 +85,6 @@ class RestaurantController extends Controller
     }
 
 
-
     public function index()
     {
         $restaurants = Resturant::all();
@@ -106,6 +105,7 @@ class RestaurantController extends Controller
             'start_time' => 'required',
             'end_time' => 'required',
             'ship_price' => 'required',// Adjust the image validation rules as needed
+            'account_number' => 'required',// Adjust the image validation rules as needed
         ]);
 
         $restaurant->update($validated);
@@ -125,6 +125,7 @@ class RestaurantController extends Controller
     {
         return view('seller.coordinate');
     }
+
     public function setCoordinates(Request $request)
     {
         $title = $request->input('title');
@@ -144,6 +145,10 @@ class RestaurantController extends Controller
                 'longitude' => $longitude,
             ]);
 
+            $user->resturant->update([
+                'address_id' => $existingAddress->id,
+            ]);
+
             $message = 'آدرس با موفقیت به‌روز رسانی شد.';
         } else {
             $newAddress = Address::create([
@@ -154,6 +159,10 @@ class RestaurantController extends Controller
             ]);
 
             $user->address()->save($newAddress);
+
+            $user->resturant->update([
+                'address_id' => $newAddress->id,
+            ]);
 
             $message = 'آدرس با موفقیت ذخیره شد.';
         }

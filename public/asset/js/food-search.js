@@ -14,16 +14,18 @@ $(document).ready(function () {
                 var searchResults = $('#searchResults');
                 searchResults.empty();
 
-                if (results.length > 0) {
-                    // Build the table for search results
-                    var table = '<table class="min-w-full divide-y divide-gray-200 mt-4"><thead></thead><tbody>';
-                    results.forEach(function (result) {
-                        table += '<tr><td>' + result.name + '</td><td>' + result.raw_material + '</td><td>' + result.price + '</td>';
-                    });
-                    table += '</tbody></table>';
-                    searchResults.append(table);
-                } else {
-                    searchResults.append('<p>No results found</p>');
+                if (searchText !== "") {
+                    if (results.length > 0) {
+                        // Build the table for search results
+                        var table = '<table class="min-w-full divide-y divide-gray-200 mt-4"><thead></thead><tbody>';
+                        results.forEach(function (result) {
+                            table += '<tr><td>' + result.name + '</td><td>' + result.raw_material + '</td><td>' + result.price + '</td>';
+                        });
+                        table += '</tbody></table>';
+                        searchResults.append(table);
+                    } else {
+                        searchResults.append('<p>No results found</p>');
+                    }
                 }
             },
             error: function (error) {

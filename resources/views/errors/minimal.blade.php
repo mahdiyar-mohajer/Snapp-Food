@@ -19,7 +19,7 @@
     <body class="antialiased">
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-800 sm:items-center sm:pt-0">
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
-                <a href="{{ route('dashboard') }}"><img src="https://uptime.com/media/website_profiles/snappfood.ir.png"></a>
+                <a href="{{ route('home') }}"><img src="https://uptime.com/media/website_profiles/snappfood.ir.png"></a>
                 <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
                     <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
                         @yield('code')

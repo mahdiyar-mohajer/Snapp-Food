@@ -14,10 +14,10 @@
                 {{ session('error') }}
             </div>
         @endif
-        <h2 class="text-2xl font-semibold mb-4">All Food Party (Admin)</h2>
+        <h2 class="text-2xl font-semibold mb-4 px-4">All Food Party (Admin)</h2>
 
         @if(count($foodParty) > 0)
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto px-4">
                 <table class="min-w-full border border-gray-300">
                     <thead>
                     <tr>

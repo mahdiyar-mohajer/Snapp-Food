@@ -36,7 +36,7 @@ class AddressController
                 'longitude' => $request->longitude,
             ]);
 
-            $user->addresses()->save($address);
+            $user->address()->save($address);
 
             return response()->json([
                 'message' => 'آدرس با موفقیت ثبت شد',

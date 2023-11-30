@@ -14,19 +14,19 @@
                 {{ session('error') }}
             </div>
         @endif
-        <h2 class="text-2xl font-semibold mb-4">All Discounts (Admin)</h2>
+        <h2 class="text-2xl font-semibold mb-4 px-4">لیست تمام تخفیف های رستوران ها</h2>
 
         @if(count($discounts) > 0)
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto px-4">
                 <table class="min-w-full border border-gray-300">
                     <thead>
                     <tr>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">Restaurant Name</th>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">Food Name</th>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">Start Time</th>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">End Time</th>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">Discount</th>
-                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">Actions</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">اسم رستوران</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">اسم غذا</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">شروع تخفیف</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">پایان تخفیف</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">درصد تخفیف</th>
+                        <th class="border-b font-semibold text-sm text-gray-800 px-6 py-3">اکشن</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -45,12 +45,12 @@
                             <td class="border-b px-6 py-4">{{ $discount->discount }}%</td>
                             <td class="border-b px-6 py-4">
                                 <a href="{{ route('admin.discounts.edit', $discount) }}"
-                                   class="text-blue-500 hover:text-blue-700 ml-2">Edit</a>
+                                   class="text-blue-500 hover:text-blue-700 ml-2">ویرایش</a>
                                 <form action="{{ route('admin.discounts.destroy', $discount) }}" method="POST"
                                       class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700 ml-2">Delete</button>
+                                    <button type="submit" class="text-red-500 hover:text-red-700 ml-2">حذف</button>
                                 </form>
                             </td>
                         </tr>

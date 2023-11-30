@@ -41,9 +41,9 @@ class UpdateProfileRequest extends FormRequest
                 'before_or_equal:23:59',
             ],
             'ship_price' => 'required',
-            'status' => 'required',
             'resturantCategories' => 'required|array',
             'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'account_number' => 'required|numeric',
         ];
     }
     public function messages(): array
@@ -65,8 +65,10 @@ class UpdateProfileRequest extends FormRequest
 
             'profile_image.image' => 'تصویر باید یک فایل تصویر باشد.',
             'profile_image.mimes' => 'تصویر باید از نوع jpeg، png، jpg، gif یا svg باشد.',
-            'profile_image.max' => 'حجم تصویر نباید از ۲ مگابایت بیشتر باشد.'
+            'profile_image.max' => 'حجم تصویر نباید از ۲ مگابایت بیشتر باشد.',
 
+            'account_number.required' => 'شماره حساب را وارد کنید.',
+            'account_number.numeric' => 'شماره حساب باید عدد باشد.',
         ];
     }
 }

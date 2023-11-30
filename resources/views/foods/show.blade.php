@@ -9,7 +9,7 @@
                 <p><strong>Name:</strong> {{ $food->name }}</p>
                 <p><strong>Raw Material:</strong> {{ $food->raw_material }}</p>
                 <p><strong>Price:</strong> ${{ $food->price }}</p>
-                <p><strong>Restaurant:</strong> @if ($food->restaurant) {{ $food->restaurant->name }} @else Restaurant not specified @endif</p>
+                <p><strong>Restaurant:</strong> @if ($food->resturant) {{ $food->resturant->name }} @else Restaurant not specified @endif</p>
             </div>
         </div>
     </div>

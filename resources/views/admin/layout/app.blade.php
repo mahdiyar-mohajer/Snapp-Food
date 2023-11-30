@@ -13,6 +13,7 @@
 
     @vite('resources/css/app.css')
     <title>@yield('title')</title>
+
 </head>
 <body>
 <div class="flex w-full">
@@ -121,7 +122,7 @@
                 </a>
 
                 <a class="flex items-center px-3 py-2 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-                   href="#">
+                   href="{{ route('admin.comments.delete-requests') }}">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                          stroke="currentColor" class="w-5 h-5">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -129,7 +130,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
 
-                    <span class="mx-2 text-sm font-medium">Setting</span>
+                    <span class="mx-2 text-sm font-medium">درخواست حذف کامنت</span>
                 </a>
             </nav>
 

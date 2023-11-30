@@ -73,6 +73,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'getComments']);
         Route::post('/', [CommentController::class, 'postComment']);
+
+        Route::post('food/{food}', [CommentController::class, 'storeOnFood']);
+        Route::post('restaurant/{restaurant}', [CommentController::class, 'storeOnRestaurant']);
+        Route::post('order/{order}', [CommentController::class, 'storeOnOrder']);
     });
     // endregion
 

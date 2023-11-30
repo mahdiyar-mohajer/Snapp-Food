@@ -8,6 +8,8 @@ use App\Http\Controllers\AdminFoodPartyController;
 use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\CommentAdminController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\FoodController;
 use App\Http\Controllers\FoodPartyController;
@@ -80,6 +82,9 @@ Route::group(['middleware' => ['role:admin']], function () {
 
     Route::resource('admin/restaurants', RestaurantController::class)->except('show');
 
+    Route::get('/admin/comments/delete-requests', [CommentAdminController::class, 'showDeleteRequests'])->name('admin.comments.delete-requests');
+    Route::get('/admin/comments/approve-delete-request/{id}', [CommentAdminController::class, 'approveDeleteRequest'])->name('admin.comments.approve-delete-request');
+    Route::get('/admin/comments/reject-delete-request/{id}', [CommentAdminController::class, 'rejectDeleteRequest'])->name('admin.comments.reject-delete-request');
 });
 
 
@@ -125,6 +130,10 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::put('/orders/{orderId}', [OrderController::class, 'update'])->name('orders.update');
     Route::get('/orders/archived', [OrderController::class, 'archived'])->name('seller.orders.archived');
 
+    Route::get('/seller/comments', [CommentController::class, 'index'])->name('seller.comments.index');
+    Route::post('/seller/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
+    Route::get('/seller/comments/filter', [CommentController::class, 'filter'])->name('seller.comments.filter');
+    Route::post('/seller/comments/{id}/submit-delete-request', [CommentController::class, 'submitDeleteRequest'])->name('comments.submitDeleteRequest');
 
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 

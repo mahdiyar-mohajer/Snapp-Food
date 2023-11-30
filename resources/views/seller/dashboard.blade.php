@@ -30,6 +30,7 @@
                         <p>ساعت شروع کار: {{ $restaurantWithImages->start_time }}</p>
                         <p>ساعت پایان کار: {{ $restaurantWithImages->end_time }}</p>
                         <p>هزینه ارسال: {{ $restaurantWithImages->ship_price }}</p>
+                        <p>شماره حساب: {{ $restaurantWithImages->account_number }}</p>
                         <form action="{{ route('restaurant.toggleActivation') }}" method="post">
                             @csrf
                             <input type="hidden" name="restaurant_id" value="{{ $restaurant->id }}">

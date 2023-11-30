@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->text('comment');
             $table->integer('rating');
-//            $table->string('parent');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('resturant_id')->nullable();
             $table->unsignedBigInteger('food_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('order_id')->nullable(); // اضافه کردن این خط
             $table->timestamps();
         });
     }

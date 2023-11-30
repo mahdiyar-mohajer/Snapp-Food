@@ -15,6 +15,9 @@ class Resturant extends Model
         'start_time',
         'end_time',
         'ship_price',
+        'account_number',
+        'status',
+        'address_id',
     ];
     public function user()
     {
@@ -23,7 +26,7 @@ class Resturant extends Model
 
     public function address()
     {
-        return $this->hasOne(Address::class);
+        return $this->belongsTo(Address::class);
     }
 
     public function bank()
@@ -60,5 +63,9 @@ class Resturant extends Model
     public function orders()
     {
         return $this->hasMany(Order::class);
+    }
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
     }
 }

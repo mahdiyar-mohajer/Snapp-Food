@@ -119,7 +119,16 @@ class FoodController extends Controller
     public function liveSearch(Request $request)
     {
         $search = $request->input('search');
-        $foods = Food::where('name', 'like', '%' . $search . '%')->get();
+        $user = auth()->user();
+
+        $foods = $user->resturant->foods()
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->orWhereHas('foodCategories', function ($categoryQuery) use ($search) {
+                        $categoryQuery->where('name', 'like', '%' . $search . '%');
+                    });
+            })
+            ->get();
 
         return response()->json(['data' => $foods]);
     }

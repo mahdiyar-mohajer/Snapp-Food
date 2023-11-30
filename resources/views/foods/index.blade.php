@@ -20,7 +20,7 @@
 
 
                 <div class="my-4">
-                    <input type="text" name="search" id="foodSearch" class="border p-2" placeholder="Search for foods">
+                    <input type="text" name="search" id="foodSearch" class="border p-2" placeholder="foods or category">
                 </div>
                 <div id="searchResults">
                     <!-- The search results will be displayed here -->
