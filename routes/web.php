@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDiscountController;
 use App\Http\Controllers\AdminFoodCategoryController;
 use App\Http\Controllers\AdminFoodPartyController;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminRestaurantCategoryController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -82,6 +83,9 @@ Route::group(['middleware' => ['role:admin']], function () {
 
     Route::resource('admin/restaurants', RestaurantController::class)->except('show');
 
+    Route::get('/admin/orders', [AdminOrderController::class, 'allOrders'])->name('admin.orders.all');
+
+
     Route::get('/admin/comments/delete-requests', [CommentAdminController::class, 'showDeleteRequests'])->name('admin.comments.delete-requests');
     Route::get('/admin/comments/approve-delete-request/{id}', [CommentAdminController::class, 'approveDeleteRequest'])->name('admin.comments.approve-delete-request');
     Route::get('/admin/comments/reject-delete-request/{id}', [CommentAdminController::class, 'rejectDeleteRequest'])->name('admin.comments.reject-delete-request');
@@ -129,6 +133,8 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::get('/orders/{orderId}/edit', [OrderController::class, 'edit'])->name('orders.edit');
     Route::put('/orders/{orderId}', [OrderController::class, 'update'])->name('orders.update');
     Route::get('/orders/archived', [OrderController::class, 'archived'])->name('seller.orders.archived');
+    Route::post('/orders/export-to-excel', [OrderController::class, 'exportToExcel'])->name('orders.exportToExcel');
+
 
     Route::get('/seller/comments', [CommentController::class, 'index'])->name('seller.comments.index');
     Route::post('/seller/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');

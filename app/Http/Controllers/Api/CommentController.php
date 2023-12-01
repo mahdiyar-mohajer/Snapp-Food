@@ -13,14 +13,25 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-    public function getComments(Request $request)
+    public function getRestaurantComments(Request $request)
     {
-        $foodId = $request->input('food_id');
         $restaurantId = $request->input('resturant_id');
 
+        $comments = Comment::where('resturant_id', $restaurantId)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($comments, 200);
+    }
+
+    public function getFoodComments(Request $request)
+    {
+        $foodId = $request->input('food_id');
+
         $comments = Comment::where('food_id', $foodId)
-            ->where('resturant_id', $restaurantId)
-            ->with('user:name')
+            ->with('user')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($comments, 200);
@@ -75,15 +86,12 @@ class CommentController extends Controller
         $user = auth()->user();
 
         if ($user) {
-            // Find the order associated with the user
             $order = Order::where('user_id', $user->id)->where('status', 'DONE')->latest()->first();
 
-            // Initialize variables for food_id, resturant_id, and order_id
             $food_id = null;
             $resturant_id = null;
             $order_id = null;
 
-            // Check the type of model and set corresponding values
             if ($model instanceof Food) {
                 $food_id = $model->id;
                 $resturant_id = $model->resturant_id;
@@ -91,11 +99,10 @@ class CommentController extends Controller
                 $resturant_id = $model->id;
             } elseif ($model instanceof Order) {
                 $order_id = $model->id;
-                $resturant_id = $model->resturant_id; // Add this line
+                $resturant_id = $model->resturant_id;
             }
 
             if ($order) {
-                // If the user has an active order, associate the comment with the order
                 $comment = new Comment([
                     'comment' => $request->input('comment'),
                     'rating' => $request->input('rating'),
@@ -105,16 +112,13 @@ class CommentController extends Controller
                     'order_id' => $order_id,
                 ]);
 
-                // Check if the comment is associated with an order item
                 if ($model instanceof OrderItem) {
-                    // If it's an order item, find the corresponding food
                     $food = Food::find($model->food_id);
                     if ($food) {
                         $comment->food_id = $food->id;
                     }
                 }
 
-                // Associate the comment with the specific model (Food, Restaurant, or Order)
                 $model->comments()->save($comment);
 
                 return response()->json(['message' => 'Comment added successfully'], 201);

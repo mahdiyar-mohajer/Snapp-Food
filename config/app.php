@@ -170,6 +170,9 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         Spatie\Permission\PermissionServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+
     ])->toArray(),
 
     /*
@@ -185,6 +188,8 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Redis' => Illuminate\Support\Facades\Redis::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+
     ])->toArray(),
 
 ];

@@ -72,7 +72,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // region comments
     Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'getComments']);
-        Route::post('/', [CommentController::class, 'postComment']);
+        Route::get('/restaurant', [CommentController::class, 'getRestaurantComments']);
+        Route::get('/food', [CommentController::class, 'getFoodComments']);
+
+//        Route::post('/', [CommentController::class, 'postComment']);
 
         Route::post('food/{food}', [CommentController::class, 'storeOnFood']);
         Route::post('restaurant/{restaurant}', [CommentController::class, 'storeOnRestaurant']);
