@@ -89,6 +89,8 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::get('/admin/comments/delete-requests', [CommentAdminController::class, 'showDeleteRequests'])->name('admin.comments.delete-requests');
     Route::get('/admin/comments/approve-delete-request/{id}', [CommentAdminController::class, 'approveDeleteRequest'])->name('admin.comments.approve-delete-request');
     Route::get('/admin/comments/reject-delete-request/{id}', [CommentAdminController::class, 'rejectDeleteRequest'])->name('admin.comments.reject-delete-request');
+    Route::resource('admin/comments', CommentAdminController::class);
+
 });
 
 
