@@ -89,5 +89,13 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'Delete request submitted successfully.');
     }
 
+    public function approveComment($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $comment->update(['approved' => true]);
+
+        return redirect()->back()->with('success', 'Comment approved successfully.');
+    }
 
 }

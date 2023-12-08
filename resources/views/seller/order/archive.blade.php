@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mx-auto">
         <h1 class="text-3xl font-bold mb-8">Archived Orders</h1>
-        <div>
+        <form id="filterForm" action="{{ route('seller.orders.archived') }}" method="get" class="mb-4">
             <label for="weekFilter">Filter by Week:</label>
             <input type="checkbox" id="weekFilter" name="week" value="1">
 
@@ -11,8 +11,7 @@
             <input type="checkbox" id="monthFilter" name="month" value="1">
 
             <button id="filterButton" type="button">Apply Filter</button>
-
-        </div>
+        </form>
 
         <div class="flex">
             <div class="w-400 h-200 mb-4">
@@ -80,108 +79,6 @@
         @endforeach
     </div>
 
-    <script>
-        $('.toggle-items').click(function () {
-            const orderId = $(this).data('order-id');
-            $('.ordered-items[data-order-id="' + orderId + '"]').toggleClass('hidden');
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            const totalOrders = {!! json_encode($totalOrders) !!};
-            const totalRevenue = {!! json_encode($totalRevenue) !!};
+@include('seller.order.script')
 
-            const ctxOrders = document.getElementById('ordersChart').getContext('2d');
-            const ordersChart = new Chart(ctxOrders, {
-                type: 'bar',
-                data: {
-                    labels: ['تعداد فروش'],
-                    datasets: [{
-                        label: 'تعداد فروش',
-                        data: [totalOrders],
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-            const revenueChart = new Chart(ctxRevenue, {
-                type: 'bar',
-                data: {
-                    labels: ['جمع فروش'],
-                    datasets: [{
-                        label: 'جمع فروش',
-                        data: [totalRevenue],
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-    <script>
-        $(document).ready(function () {
-            const ctxOrders = document.getElementById('ordersChart').getContext('2d');
-            const ctxRevenue = document.getElementById('revenueChart').getContext('2d');
-
-            let weekFilter = false;
-            let monthFilter = false;
-
-            const ordersChart = new Chart(ctxOrders, { /* ... */});
-            const revenueChart = new Chart(ctxRevenue, { /* ... */});
-
-            $('#filterButton').click(function () {
-                updateCharts();
-            });
-
-            $('#weekFilter').change(function () {
-                weekFilter = $(this).is(':checked');
-                updateCharts();
-            });
-
-            $('#monthFilter').change(function () {
-                monthFilter = $(this).is(':checked');
-                updateCharts();
-            });
-
-            function updateCharts() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/orders/archived',
-                    data: {
-                        week_filter: weekFilter,
-                        month_filter: monthFilter,
-                    },
-                    success: function (data) {
-                        ordersChart.data = data.ordersChartData;
-                        revenueChart.data = data.revenueChartData;
-                        ordersChart.update();
-                        revenueChart.update();
-                    },
-                    error: function () {
-                        console.error('Error fetching data');
-                    }
-                });
-            }
-        });
-
-
-    </script>
 @endsection

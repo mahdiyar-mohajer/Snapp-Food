@@ -42,7 +42,7 @@ class OrderController extends Controller
                         $fail("Invalid status transition from {$order->status} to $value.");
                     }
 
-                    if ($value === $order->status) {
+                    if ($value !== $allowedStatuses[0]) {
                         $fail("Cannot revert to the previous status.");
                     }
                 },
@@ -52,9 +52,7 @@ class OrderController extends Controller
         $order->status = $request->input('status');
         $order->save();
 
-//        $order->user->notify(new OrderStatusNotification($order->status));
-
-
+        $order->user->notify(new OrderStatusNotification($order->status));
 
         if ($order->status === 'DONE') {
             $order->update(['archived' => true]);
@@ -68,7 +66,7 @@ class OrderController extends Controller
         $statusOptions = ['PENDING', 'ACCEPT', 'PREPARING', 'DONE'];
         $currentIndex = array_search($currentStatus, $statusOptions);
 
-        return array_slice($statusOptions, $currentIndex);
+        return array_slice($statusOptions, $currentIndex + 1);
     }
     public function archived(Request $request)
     {
@@ -79,7 +77,8 @@ class OrderController extends Controller
 
         $timeFilter = $request->input('time_filter');
         if ($timeFilter) {
-            $query->whereBetween('created_at', $this->getTimeRange($timeFilter));
+            $timeRange = $this->getTimeRange($timeFilter);
+            $query->whereBetween('created_at', $timeRange);
         }
 
         $archivedOrders = $query->get();
@@ -91,7 +90,7 @@ class OrderController extends Controller
             ->where('orders.resturant_id', $restaurantId);
 
         if ($timeFilter) {
-            $totalRevenue->whereBetween('orders.created_at', $this->getTimeRange($timeFilter));
+            $totalRevenue->whereBetween('orders.created_at', $timeRange);
         }
 
         $totalRevenue = $totalRevenue->sum(DB::raw('order_items.price * order_items.count'));
@@ -103,11 +102,14 @@ class OrderController extends Controller
     {
         $now = now();
 
-        return match ($filter) {
-            'week' => [$now->startOfWeek(), $now->endOfWeek()],
-            'month' => [$now->startOfMonth(), $now->endOfMonth()],
-            default => [],
-        };
+        switch ($filter) {
+            case 'week':
+                return [$now->startOfWeek(), $now->endOfWeek()];
+            case 'month':
+                return [$now->startOfMonth(), $now->endOfMonth()];
+            default:
+                return [$now->startOfDay(), $now->endOfDay()];
+        }
     }
 
 
@@ -138,7 +140,6 @@ class OrderController extends Controller
                     'Price' => $orderItem->price,
                     'Quantity' => $orderItem->count,
                     'Order Date' => $order->created_at->format('Y-m-d H:i:s'),
-                    // Add more fields as needed
                 ];
             }
         }

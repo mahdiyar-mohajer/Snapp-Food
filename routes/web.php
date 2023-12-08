@@ -136,12 +136,16 @@ Route::middleware(['auth', 'role:seller'])->group(function () {
     Route::put('/orders/{orderId}', [OrderController::class, 'update'])->name('orders.update');
     Route::get('/orders/archived', [OrderController::class, 'archived'])->name('seller.orders.archived');
     Route::post('/orders/export-to-excel', [OrderController::class, 'exportToExcel'])->name('orders.exportToExcel');
+//    Route::get('/seller/orders/archived', [OrderController::class, 'archived'])->name('seller.orders.archived');
+
 
 
     Route::get('/seller/comments', [CommentController::class, 'index'])->name('seller.comments.index');
     Route::post('/seller/comments/{comment}/reply', [CommentController::class, 'reply'])->name('comments.reply');
     Route::get('/seller/comments/filter', [CommentController::class, 'filter'])->name('seller.comments.filter');
     Route::post('/seller/comments/{id}/submit-delete-request', [CommentController::class, 'submitDeleteRequest'])->name('comments.submitDeleteRequest');
+    Route::post('/seller/comments/approve/{id}', [CommentController::class, 'approveComment'])->name('comments.approve');
+
 
     Route::get('/foods/search', [FoodController::class, 'liveSearch'])->name('foods.search');
 

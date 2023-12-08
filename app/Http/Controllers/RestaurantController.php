@@ -104,8 +104,8 @@ class RestaurantController extends Controller
             'phone_number' => 'required',
             'start_time' => 'required',
             'end_time' => 'required',
-            'ship_price' => 'required',// Adjust the image validation rules as needed
-            'account_number' => 'required',// Adjust the image validation rules as needed
+            'ship_price' => 'required',
+            'account_number' => 'required',
         ]);
 
         $restaurant->update($validated);

@@ -182,7 +182,7 @@
             </div>
         </div>
     </aside>
-    <div class="flex w-5/6">
+    <div class="flex w-5/6 mx-4">
 
         @yield('content')
     </div>

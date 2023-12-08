@@ -18,6 +18,7 @@ class CommentController extends Controller
         $restaurantId = $request->input('resturant_id');
 
         $comments = Comment::where('resturant_id', $restaurantId)
+            ->where('approved', true)
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -30,35 +31,13 @@ class CommentController extends Controller
         $foodId = $request->input('food_id');
 
         $comments = Comment::where('food_id', $foodId)
+            ->where('approved', true)
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
 
         return response()->json($comments, 200);
     }
-//    public function postComment(Request $request)
-//    {
-//        $request->validate([
-//            'food_id' => 'required',
-//            'resturant_id' => 'required',
-////            'cart_id' => 'required',
-//            'rating' => 'required',
-//            'comment' => 'required',
-//        ]);
-//
-//        $comment = new Comment();
-//        $comment->food_id = $request->input('food_id');
-//        $comment->resturant_id = $request->input('resturant_id');
-////        $comment->cart_id = $request->input('cart_id');
-//        $comment->rating = $request->input('rating');
-//        $comment->comment = $request->input('comment');
-//
-//        $comment->user_id = Auth::id();
-//
-//        $comment->save();
-//
-//        return response()->json(['message' => 'کامنت با موفقیت اضافه شد'], 201);
-//    }
 
 
     public function storeOnFood(Request $request, Food $food)
@@ -86,6 +65,10 @@ class CommentController extends Controller
         $user = auth()->user();
 
         if ($user) {
+            if ($user->comments()->where('commentable_type', get_class($model))->where('commentable_id', $model->id)->exists()) {
+                return response()->json(['message' => 'You have already commented on this item.'], 400);
+            }
+
             $order = Order::where('user_id', $user->id)->where('status', 'DONE')->latest()->first();
 
             $food_id = null;

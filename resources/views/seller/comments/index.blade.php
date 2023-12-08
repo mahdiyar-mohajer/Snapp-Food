@@ -26,7 +26,8 @@
 
         <div id="comments-container">
             @foreach($comments as $comment)
-                <div class="bg-gray-100 p-4 mb-4">
+                <div
+                    class="bg-gray-100 p-4 mb-4 {{ $comment->approved ? 'border-green-500' : 'border-red-500' }} border-l-4">
                     <p class="text-lg font-semibold">Comment: {{ $comment->comment }}</p>
                     <p class="text-gray-600">Rating: {{ $comment->rating }}</p>
 
@@ -46,12 +47,26 @@
                             </ul>
                         @endif
                     @elseif($comment->food_id && $comment->food && $comment->food->resturant)
-                        <p class="text-green-500">Food: {{ $comment->food->name }} ({{ $comment->food->resturant->name }})</p>
+                        <p class="text-green-500">Food: {{ $comment->food->name }}({{ $comment->food->resturant->name }}
+                            )</p>
                     @elseif($comment->resturant)
                         <p class="text-orange-500">Restaurant: {{ $comment->resturant->name }}</p>
                     @endif
+                    @if($comment->approved)
+                        <span class="bg-green-500 text-white px-2 py-1 rounded">Approved</span>
+                    @else
+                        <span class="bg-red-500 text-white px-2 py-1 rounded">Not Approved</span>
 
-                    <form action="{{ route('comments.submitDeleteRequest', ['id' => $comment->id]) }}" method="post" class="mb-2">
+                        <form action="{{ route('comments.approve', ['id' => $comment->id]) }}" method="post"
+                              class="mt-2">
+                            @csrf
+                            @method('post')
+                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded">Approve Comment
+                            </button>
+                        </form>
+                    @endif
+                    <form action="{{ route('comments.submitDeleteRequest', ['id' => $comment->id]) }}" method="post"
+                          class="mb-2">
                         @csrf
                         @method('POST')
                         <button type="submit" class="bg-red-500 text-white p-2 rounded">Submit Delete Request</button>
@@ -60,7 +75,8 @@
                     <div class="mt-4">
                         <form action="{{ route('comments.reply', $comment) }}" method="post" class="reply-form">
                             @csrf
-                            <textarea name="reply" class="w-full p-2 border rounded" placeholder="Reply to this comment"></textarea>
+                            <textarea name="reply" class="w-full p-2 border rounded"
+                                      placeholder="Reply to this comment"></textarea>
                             <button type="submit" class="mt-2 bg-blue-500 text-white p-2 rounded">Reply</button>
                         </form>
                     </div>
@@ -80,11 +96,11 @@
 
 
     <script>
-        $(document).ready(function() {
-            $('#food-filter').on('change', function() {
+        $(document).ready(function () {
+            $('#food-filter').on('change', function () {
                 var selectedFood = $(this).val();
 
-                $('.comment-container').each(function() {
+                $('.comment-container').each(function () {
                     var commentFood = $(this).data('food');
 
                     if (selectedFood === '' || selectedFood === commentFood) {
