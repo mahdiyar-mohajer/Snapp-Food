@@ -7,26 +7,42 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-About Project
-This project is a clone of Snappfood
+<h1>About Project</h1>
+
+<p>This project is a clone of Snappfood</p>
 
 
-Admin
-Banner(delete, edit, create, set)
+<h3>Admin</h3>
+
+<p>Banner(delete, edit, create, set)
+
 Food categories(delete, edit, create)
+
 Restaurant categories(delete, edit, create)
-Discount(delete, edit, create)
+
+Discount(delete, edit, create)</p>
 
 
-Seller
-Restaurant(delete, edit, create)
+<h3>Seller</h3>
+
+<p>Restaurant(delete, edit, create)
+
 Food(delete, edit, create)
+
 Installation
+
 composer update
+
 npm install
+
 npm run dev
+
 sail up -d
+
 php artisan migrate:fresh --seed
+
 php artisan generate:key
+
 php artisan storage:link
-php artisan serve
+
+php artisan serve</p>
