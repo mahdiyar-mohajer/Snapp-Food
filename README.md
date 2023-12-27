@@ -29,7 +29,8 @@ Discount(delete, edit, create)</p>
 
 Food(delete, edit, create)
 
-Installation
+
+<h3>Installation</h3>
 
 composer update
 
